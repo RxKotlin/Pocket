@@ -10,10 +10,24 @@ import android.widget.Toast
 
 class MainActivity : AppCompatActivity() {
 
+    val VALID_HTTP_PREFIX: String = "http://"
+    val VALID_HTTPS_PREFIX: String = "https://"
+    val VALID_CLIPBOARD_STRING_MIN_LENGTH: Int = 7 // "http:// or https://
+    val CLIPBOARD_TAG: String = "CLIPBOARD"
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        val resultString: String = getClipBoardData()
+        if (checkClipBoardValidation(resultString)) {
+            Log.e(CLIPBOARD_TAG, "Valid String")
+        } else {
+            Log.e(CLIPBOARD_TAG, "Invalid String")
+        }
+    }
+
+    private fun getClipBoardData(): String {
         val clipboardManager: ClipboardManager =
                 getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
         var resultString: String = ""
@@ -26,9 +40,28 @@ class MainActivity : AppCompatActivity() {
                 val str = item.coerceToText(this)
                 resultString += str
             }
-            Toast.makeText(this, resultString, Toast.LENGTH_SHORT).show()
-        } else {
-            Toast.makeText(this, "There is no data in clipboard", Toast.LENGTH_SHORT).show()
         }
+
+        return resultString
+    }
+
+    private fun checkClipBoardValidation(clipboardString: String):Boolean {
+        if (clipboardString.length < VALID_CLIPBOARD_STRING_MIN_LENGTH) {
+            return false
+        }
+
+        val prefixHTTP = clipboardString.subSequence(0, VALID_CLIPBOARD_STRING_MIN_LENGTH)
+        if (prefixHTTP == VALID_HTTP_PREFIX) {
+            Log.e(CLIPBOARD_TAG, prefixHTTP)
+            return true
+        }
+
+        val prefixHTTPS = clipboardString.subSequence(0, VALID_CLIPBOARD_STRING_MIN_LENGTH + 1)
+        if (prefixHTTPS == VALID_HTTPS_PREFIX) {
+            Log.e(CLIPBOARD_TAG, prefixHTTPS)
+            return true
+        }
+
+        return false
     }
 }
