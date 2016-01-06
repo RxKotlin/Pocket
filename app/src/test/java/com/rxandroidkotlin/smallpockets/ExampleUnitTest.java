@@ -1,4 +1,4 @@
-package com.rxandroidkotlin.smallpockets;
+package com.kotlinchina.smallpockets;
 
 import org.junit.Test;
 

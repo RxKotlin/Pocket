@@ -1,4 +1,4 @@
-package com.rxandroidkotlin.smallpockets;
+package com.kotlinchina.smallpockets;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;
