@@ -9,7 +9,6 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".view.MainActivity">
 
-
     <ListView
         android:id="@+id/listView"
         android:scrollbars="none"
@@ -17,6 +16,6 @@
         android:cacheColorHint="@android:color/transparent"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
     </ListView>
+
 </RelativeLayout>

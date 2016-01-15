@@ -20,7 +20,7 @@ class ShowSiteListAdapter<E> internal constructor( val context: Context,  val li
     }
 
     override fun getItem(position: Int): Any {
-        return list[position]!!
+        return list[position]
     }
 
     override fun getItemId(position: Int): Long {
@@ -28,30 +28,22 @@ class ShowSiteListAdapter<E> internal constructor( val context: Context,  val li
     }
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View? {
-
-        if(convertView !=null){
+        
+        convertView?.let {//相当于if(convertView !=null){return convertView}
             return convertView
         }
 
-        val showListView:View = View.inflate(context,R.layout.show_site_list_item,null) ;
-        val holder:ViewHolder =  ViewHolder()
+        val showListView = View.inflate(context,R.layout.show_site_list_item,null)
+        val holder =  ViewHolder()
         holder.title = showListView.findViewById(R.id.title) as? TextView
         holder.siteTag = showListView.findViewById(R.id.tag_group) as? TagGroup
 
-
-        val defineData:HashMap<String,Any> = list[position]
-
-        val defineName: Any = defineData?.get("name") as String ;
-
-        holder.title?.text = defineName as CharSequence
-
-        val tags: ArrayList<String>? = defineData?.get("tags") as ArrayList<String> ;
-
-        Log.e("===", defineData?.get("tags").toString()) ;
-
+        val defineData = list[position]
+        val defineName = defineData?.get("name") as String
+        holder.title?.text = defineName.toString()
+        val tags = defineData?.get("tags") as ArrayList<String>
+        Log.e("===", defineData?.get("tags").toString())
         holder.siteTag?.setTags(tags)
-
-
 
         return showListView
     }
