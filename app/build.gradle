@@ -28,6 +28,8 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:23.1.1'
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+
+    compile 'me.gujun.android.taggroup:library:1.4@aar'
 }
 buildscript {
     ext.kotlin_version = '1.0.0-beta-4584'
