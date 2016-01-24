@@ -20,10 +20,6 @@ class HttpService {
                         override fun onResponse(response: String?) {
                             response.let {
                                 subscriber.onNext(it)
-//                                val start = it?.indexOf("<title>") as Int
-//                                val end = it?.indexOf("</title>") as Int
-//                                System.out.println(it?.subSequence(start + 7, end))
-//                                val title = it?.subSequence(start + 7, end) as String
                             }
                         }
                     }, object : Response.ErrorListener {
