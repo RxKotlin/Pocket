@@ -21,7 +21,7 @@ class MainPresenter(mainView: IMainView): IMainPresenter {
             return
         }
 
-        this.mainView.showLink("Valid: ${url.toString()}")
+        this.mainView.showLink("${url.toString()}")
     }
 
     override fun loadSiteListData() {
