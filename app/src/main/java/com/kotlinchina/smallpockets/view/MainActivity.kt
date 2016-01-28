@@ -85,10 +85,10 @@ class MainActivity : AppCompatActivity(), IMainView {
         val dialog: AlertDialog.Builder = AlertDialog.Builder(this)
         dialog.setTitle("需要保存此链接么？")
         dialog.setMessage(link)
-        dialog.setPositiveButton("OK", DialogInterface.OnClickListener { dialogInterface, i ->
+        dialog.setPositiveButton("OK", { dialogInterface, i ->
             mainPresenter?.getTitleWithURL(link)
         })
-        dialog.setNegativeButton("Cancel", DialogInterface.OnClickListener { dialogInterface, i ->
+        dialog.setNegativeButton("Cancel", { dialogInterface, i ->
             Log.d(CLIPBOARD_TAG, "Cancel")
         })
         dialog.show()
