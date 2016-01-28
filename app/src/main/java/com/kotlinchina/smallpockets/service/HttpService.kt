@@ -10,9 +10,14 @@ import com.android.volley.toolbox.Volley
 import rx.Observable
 import rx.lang.kotlin.observable
 
-class HttpService {
+class HttpService constructor(applicationContext: Context) {
+    val applicationContext: Context
 
-    fun fetchDataWithUrl(url: String, applicationContext: Context): Observable<String> {
+    init {
+        this.applicationContext = applicationContext
+    }
+
+    fun fetchDataWithUrl(url: String): Observable<String> {
         return observable { subscriber ->
             val queue: RequestQueue = Volley.newRequestQueue(applicationContext)
             val stringRequest = StringRequest(url,

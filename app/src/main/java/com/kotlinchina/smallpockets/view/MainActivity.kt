@@ -93,8 +93,8 @@ class MainActivity : AppCompatActivity(), IMainView {
         dialog.setTitle("需要保存此链接么？")
         dialog.setMessage(link)
         dialog.setPositiveButton("OK", DialogInterface.OnClickListener { dialogInterface, i ->
-            val service = HttpService()
-            service.fetchDataWithUrl(link, this)
+            val service = HttpService(this)
+            service.fetchDataWithUrl(link)
                     .map { t ->
                         val start = t?.indexOf("<title>") as Int
                         val end = t?.indexOf("</title>") as Int
