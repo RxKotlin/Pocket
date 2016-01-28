@@ -89,10 +89,8 @@ class MainPresenter(mainView: IMainView, context: Context): IMainPresenter {
                     val end = t?.indexOf("</title>") as Int
                     t?.subSequence(start + 7, end) as String
                 }
-                .subscribe(object: Action1<String> {
-                    override fun call(t: String?) {
-                        Log.e("=======title", t)
-                    }
-                })
+                .subscribe { title ->
+                    Log.e("=======title", title)
+                }
     }
 }
