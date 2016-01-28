@@ -82,12 +82,16 @@ class MainPresenter(mainView: IMainView, context: Context): IMainPresenter {
     }
 
     override fun getTitleWithURL(url: String) {
+        fun titleFromData(t: String): String {
+            val start = t?.indexOf("<title>")
+            val end = t?.indexOf("</title>")
+            return t?.subSequence(start + 7, end) as String
+        }
+
         val service = HttpService(context)
         service.fetchDataWithUrl(url)
                 .map { t ->
-                    val start = t?.indexOf("<title>") as Int
-                    val end = t?.indexOf("</title>") as Int
-                    t?.subSequence(start + 7, end) as String
+                    titleFromData(t)
                 }
                 .subscribe { title ->
                     Log.e("=======title", title)
