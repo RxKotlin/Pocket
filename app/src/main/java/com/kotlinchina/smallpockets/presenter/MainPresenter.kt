@@ -1,18 +1,24 @@
 package com.kotlinchina.smallpockets.presenter
 
+import android.content.Context
+import android.util.Log
+import com.kotlinchina.smallpockets.service.HttpService
 import com.kotlinchina.smallpockets.view.IMainView
+import rx.functions.Action1
 import java.net.MalformedURLException
 import java.net.URL
 import java.util.*
 import kotlin.collections.arrayListOf
 import kotlin.collections.hashMapOf
 
-class MainPresenter(mainView: IMainView): IMainPresenter {
+class MainPresenter(mainView: IMainView, context: Context): IMainPresenter {
 
     var mainView: IMainView
+    val context: Context
 
     init {
         this.mainView = mainView
+        this.context = context
     }
 
     override fun checkClipBoardValidation(clipboardString: String) {
@@ -73,5 +79,20 @@ class MainPresenter(mainView: IMainView): IMainPresenter {
         )
         this.mainView.setSiteListData(data)
 
+    }
+
+    override fun getTitleWithURL(url: String) {
+        val service = HttpService(context)
+        service.fetchDataWithUrl(url)
+                .map { t ->
+                    val start = t?.indexOf("<title>") as Int
+                    val end = t?.indexOf("</title>") as Int
+                    t?.subSequence(start + 7, end) as String
+                }
+                .subscribe(object: Action1<String> {
+                    override fun call(t: String?) {
+                        Log.e("=======title", t)
+                    }
+                })
     }
 }

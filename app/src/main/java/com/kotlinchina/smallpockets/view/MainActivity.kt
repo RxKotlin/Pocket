@@ -10,17 +10,10 @@ import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.widget.ListView
 import android.widget.Toast
-import com.android.volley.RequestQueue
-import com.android.volley.Response
-import com.android.volley.VolleyError
-import com.android.volley.toolbox.StringRequest
-import com.android.volley.toolbox.Volley
 import com.kotlinchina.smallpockets.R
 import com.kotlinchina.smallpockets.adapter.ShowSiteListAdapter
 import com.kotlinchina.smallpockets.presenter.IMainPresenter
 import com.kotlinchina.smallpockets.presenter.MainPresenter
-import com.kotlinchina.smallpockets.service.HttpService
-import rx.functions.Action1
 import java.util.*
 
 
@@ -40,7 +33,7 @@ class MainActivity : AppCompatActivity(), IMainView {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        this.mainPresenter = MainPresenter(this)
+        this.mainPresenter = MainPresenter(this, this)
 
         val resultString = getClipBoardData()
         this.mainPresenter?.checkClipBoardValidation(resultString)
@@ -93,18 +86,7 @@ class MainActivity : AppCompatActivity(), IMainView {
         dialog.setTitle("需要保存此链接么？")
         dialog.setMessage(link)
         dialog.setPositiveButton("OK", DialogInterface.OnClickListener { dialogInterface, i ->
-            val service = HttpService(this)
-            service.fetchDataWithUrl(link)
-                    .map { t ->
-                        val start = t?.indexOf("<title>") as Int
-                        val end = t?.indexOf("</title>") as Int
-                        t?.subSequence(start + 7, end) as String
-                    }
-                    .subscribe(object: Action1<String> {
-                        override fun call(t: String?) {
-                            Log.e("=======title", t)
-                        }
-                    })
+            mainPresenter?.getTitleWithURL(link)
         })
         dialog.setNegativeButton("Cancel", DialogInterface.OnClickListener { dialogInterface, i ->
             Log.d(CLIPBOARD_TAG, "Cancel")
