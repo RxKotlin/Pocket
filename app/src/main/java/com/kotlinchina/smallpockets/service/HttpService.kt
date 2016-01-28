@@ -20,21 +20,15 @@ class HttpService constructor(applicationContext: Context) {
     fun fetchDataWithUrl(url: String): Observable<String> {
         return observable { subscriber ->
             val queue: RequestQueue = Volley.newRequestQueue(applicationContext)
-            val stringRequest = StringRequest(url,
-                    object : Response.Listener<String> {
-                        override fun onResponse(response: String?) {
-                            response.let {
-                                subscriber.onNext(it)
-                            }
-                        }
-                    }, object : Response.ErrorListener {
-                        override fun onErrorResponse(error: VolleyError?) {
-                            error.let {
-                                Log.d("TAG", error.toString())
-                                subscriber.onError(Throwable(error.toString()))
-                            }
-                        }
-                    })
+            val stringRequest = StringRequest(url, { response ->
+                response.let {
+                    subscriber.onNext(it)
+                }
+            }, { error ->
+                error.let {
+                    subscriber.onError(Throwable(error.toString()))
+                }
+            })
             queue.add(stringRequest)
         }
     }
