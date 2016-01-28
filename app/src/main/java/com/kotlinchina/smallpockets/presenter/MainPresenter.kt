@@ -4,21 +4,21 @@ import android.content.Context
 import android.util.Log
 import com.kotlinchina.smallpockets.service.HttpService
 import com.kotlinchina.smallpockets.view.IMainView
-import rx.functions.Action1
 import java.net.MalformedURLException
 import java.net.URL
-import java.util.*
 import kotlin.collections.arrayListOf
 import kotlin.collections.hashMapOf
 
-class MainPresenter(mainView: IMainView, context: Context): IMainPresenter {
+class MainPresenter(mainView: IMainView, context: Context, httpService: HttpService): IMainPresenter {
 
     var mainView: IMainView
     val context: Context
+    val httpService: HttpService
 
     init {
         this.mainView = mainView
         this.context = context
+        this.httpService = httpService
     }
 
     override fun checkClipBoardValidation(clipboardString: String) {
@@ -88,8 +88,7 @@ class MainPresenter(mainView: IMainView, context: Context): IMainPresenter {
             return t?.subSequence(start + 7, end) as String
         }
 
-        val service = HttpService(context)
-        service.fetchDataWithUrl(url)
+        httpService?.fetchDataWithUrl(url)
                 .map { t ->
                     titleFromData(t)
                 }

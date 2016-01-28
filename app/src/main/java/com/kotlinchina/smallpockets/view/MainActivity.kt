@@ -3,7 +3,6 @@ package com.kotlinchina.smallpockets.view
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
-import android.content.DialogInterface
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
@@ -14,6 +13,7 @@ import com.kotlinchina.smallpockets.R
 import com.kotlinchina.smallpockets.adapter.ShowSiteListAdapter
 import com.kotlinchina.smallpockets.presenter.IMainPresenter
 import com.kotlinchina.smallpockets.presenter.MainPresenter
+import com.kotlinchina.smallpockets.service.impl.VolleyHttpService
 import java.util.*
 
 
@@ -33,7 +33,7 @@ class MainActivity : AppCompatActivity(), IMainView {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        this.mainPresenter = MainPresenter(this, this)
+        this.mainPresenter = MainPresenter(this, this, VolleyHttpService(this))
 
         val resultString = getClipBoardData()
         this.mainPresenter?.checkClipBoardValidation(resultString)
