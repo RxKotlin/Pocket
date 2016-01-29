@@ -81,7 +81,7 @@ class MainActivity : AppCompatActivity(), IMainView {
         return resultString
     }
 
-    override fun showLink(link: String) {
+    override fun showDialog(link: String) {
         Log.e(CLIPBOARD_TAG, link)
 
         val dialog: AlertDialog.Builder = AlertDialog.Builder(this)

@@ -31,7 +31,7 @@ class MainPresenter(mainView: IMainView, context: Context, httpService: HttpServ
             return
         }
 
-        this.mainView.showLink("${url.toString()}")
+        this.mainView.showDialog("${url.toString()}")
     }
 
     override fun loadSiteListData() {
