@@ -1,7 +1,8 @@
-package com.kotlinchina.smallpockets.presenter
+package com.kotlinchina.smallpockets.presenter.impl
 
 import android.content.Context
 import android.util.Log
+import com.kotlinchina.smallpockets.presenter.IMainPresenter
 import com.kotlinchina.smallpockets.service.HttpService
 import com.kotlinchina.smallpockets.view.IMainView
 import java.net.MalformedURLException
@@ -22,7 +23,9 @@ class MainPresenter(mainView: IMainView, context: Context, httpService: HttpServ
     }
 
     override fun checkClipBoardValidation(clipboardString: String) {
-        val url = try { URL(clipboardString) } catch (e: MalformedURLException) {
+        val url = try {
+            URL(clipboardString)
+        } catch (e: MalformedURLException) {
             this.mainView.showNoLinkWithMsg("Invalid String")
             return
         }
@@ -33,7 +36,7 @@ class MainPresenter(mainView: IMainView, context: Context, httpService: HttpServ
     override fun loadSiteListData() {
         //相当于java中的lsitView添加HashMap，非常好用
         var data = arrayListOf(
-                hashMapOf<String,Any>(
+                hashMapOf<String, Any>(
                         "name" to "Android技术相关",
                         "tags" to arrayListOf(
                                 "自定义View",
@@ -41,7 +44,7 @@ class MainPresenter(mainView: IMainView, context: Context, httpService: HttpServ
                                 "图形界面"
                         )
                 ),
-                hashMapOf<String,Any>(
+                hashMapOf<String, Any>(
                         "name" to "美女图片",
                         "tags" to arrayListOf(
                                 "美女",
@@ -51,7 +54,7 @@ class MainPresenter(mainView: IMainView, context: Context, httpService: HttpServ
                                 "美丽"
                         )
                 ),
-                hashMapOf<String,Any>(
+                hashMapOf<String, Any>(
                         "name" to "汽车之家",
                         "tags" to arrayListOf(
                                 "新款",
