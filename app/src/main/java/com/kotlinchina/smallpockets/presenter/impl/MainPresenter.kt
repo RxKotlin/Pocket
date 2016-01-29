@@ -2,6 +2,7 @@ package com.kotlinchina.smallpockets.presenter.impl
 
 import android.content.Context
 import android.util.Log
+import cn.wanghaomiao.xpath.model.JXDocument
 import com.kotlinchina.smallpockets.presenter.IMainPresenter
 import com.kotlinchina.smallpockets.service.HttpService
 import com.kotlinchina.smallpockets.view.IMainView
@@ -86,18 +87,17 @@ class MainPresenter(mainView: IMainView, context: Context, httpService: HttpServ
     }
 
     override fun getTitleWithURL(url: String) {
-        fun titleFromData(t: String): String {
-            val start = t?.indexOf("<title>")
-            val end = t?.indexOf("</title>")
-            return t?.subSequence(start + 7, end) as String
+        fun titleFromData(t: String): String? {
+            val title = JXDocument(t).sel("//title/text()").first()
+            return title as? String
         }
 
-        httpService?.fetchDataWithUrl(url)
+        httpService.fetchDataWithUrl(url)
                 .map { t ->
                     titleFromData(t)
                 }
                 .subscribe { title ->
-                    mainView?.showSaveScreenWithTitle(title, url)
+                    if (title != null) mainView.showSaveScreenWithTitle(title, url)
                 }
     }
 

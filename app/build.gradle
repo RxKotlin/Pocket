@@ -35,6 +35,8 @@ dependencies {
     // Parse
     compile 'com.parse.bolts:bolts-android:1.+'
     compile 'com.parse:parse-android:1.+'
+    // JsoupXpath
+    compile 'cn.wanghaomiao:JsoupXpath:0.2.2'
 }
 buildscript {
     ext.kotlin_version = '1.0.0-beta-4584'
