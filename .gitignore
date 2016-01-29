@@ -33,3 +33,4 @@ captures/
 
 # IDEA
 .idea/
+*.iml
