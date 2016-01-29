@@ -103,4 +103,8 @@ class MainActivity : AppCompatActivity(), IMainView {
     override fun setSiteListData(data: ArrayList<HashMap<String, Any>>) {
         datas.addAll(data)
     }
+
+    override fun showSaveScreenWithTitle(title: String, url: String) {
+        Log.d(this.javaClass.name, "title: $title, url: $url")
+    }
 }

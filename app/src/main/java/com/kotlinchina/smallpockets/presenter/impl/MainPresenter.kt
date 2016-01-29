@@ -97,7 +97,7 @@ class MainPresenter(mainView: IMainView, context: Context, httpService: HttpServ
                     titleFromData(t)
                 }
                 .subscribe { title ->
-                    Log.e("=======title", title)
+                    mainView?.showSaveScreenWithTitle(title, url)
                 }
     }
 

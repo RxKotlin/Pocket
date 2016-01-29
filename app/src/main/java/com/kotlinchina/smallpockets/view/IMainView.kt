@@ -6,4 +6,5 @@ interface IMainView {
     fun showDialog(link: String)
     fun showNoLinkWithMsg(msg: String)
     fun setSiteListData(data: ArrayList<HashMap<String, Any>>)
+    fun showSaveScreenWithTitle(title: String, url: String)
 }
