@@ -5,6 +5,7 @@ import android.util.Log
 import com.kotlinchina.smallpockets.presenter.IMainPresenter
 import com.kotlinchina.smallpockets.service.HttpService
 import com.kotlinchina.smallpockets.view.IMainView
+import com.parse.Parse
 import java.net.MalformedURLException
 import java.net.URL
 import kotlin.collections.arrayListOf
@@ -98,5 +99,10 @@ class MainPresenter(mainView: IMainView, context: Context, httpService: HttpServ
                 .subscribe { title ->
                     Log.e("=======title", title)
                 }
+    }
+
+    override fun setupParse() {
+        Parse.enableLocalDatastore(context)
+        Parse.initialize(context)
     }
 }
