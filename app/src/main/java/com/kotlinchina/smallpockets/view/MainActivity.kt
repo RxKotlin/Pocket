@@ -4,6 +4,7 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.os.Bundle
+import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.widget.ListView
@@ -12,7 +13,9 @@ import com.kotlinchina.smallpockets.R
 import com.kotlinchina.smallpockets.adapter.ShowSiteListAdapter
 import com.kotlinchina.smallpockets.presenter.IMainPresenter
 import com.kotlinchina.smallpockets.presenter.MainPresenter
+import com.kotlinchina.smallpockets.service.impl.VolleyHttpService
 import java.util.*
+
 
 class MainActivity : AppCompatActivity(), IMainView {
 
@@ -30,7 +33,7 @@ class MainActivity : AppCompatActivity(), IMainView {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        this.mainPresenter = MainPresenter(this)
+        this.mainPresenter = MainPresenter(this, this, VolleyHttpService(this))
 
         val resultString = getClipBoardData()
         this.mainPresenter?.checkClipBoardValidation(resultString)
@@ -78,6 +81,17 @@ class MainActivity : AppCompatActivity(), IMainView {
 
     override fun showLink(link: String) {
         Log.e(CLIPBOARD_TAG, link)
+
+        val dialog: AlertDialog.Builder = AlertDialog.Builder(this)
+        dialog.setTitle("需要保存此链接么？")
+        dialog.setMessage(link)
+        dialog.setPositiveButton("OK", { dialogInterface, i ->
+            mainPresenter?.getTitleWithURL(link)
+        })
+        dialog.setNegativeButton("Cancel", { dialogInterface, i ->
+            Log.d(CLIPBOARD_TAG, "Cancel")
+        })
+        dialog.show()
     }
 
     override fun showNoLinkWithMsg(msg: String) {

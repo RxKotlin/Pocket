@@ -30,6 +30,8 @@ dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
     compile 'me.gujun.android.taggroup:library:1.4@aar'
+    compile 'com.mcxiaoke.volley:library:1.0.19'
+    compile 'io.reactivex:rxkotlin:0.30.1'
 }
 buildscript {
     ext.kotlin_version = '1.0.0-beta-4584'
