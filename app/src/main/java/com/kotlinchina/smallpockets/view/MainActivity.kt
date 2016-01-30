@@ -12,7 +12,7 @@ import android.widget.Toast
 import com.kotlinchina.smallpockets.R
 import com.kotlinchina.smallpockets.adapter.ShowSiteListAdapter
 import com.kotlinchina.smallpockets.presenter.IMainPresenter
-import com.kotlinchina.smallpockets.presenter.MainPresenter
+import com.kotlinchina.smallpockets.presenter.impl.MainPresenter
 import com.kotlinchina.smallpockets.service.impl.VolleyHttpService
 import java.util.*
 
@@ -34,6 +34,8 @@ class MainActivity : AppCompatActivity(), IMainView {
         setContentView(R.layout.activity_main)
 
         this.mainPresenter = MainPresenter(this, this, VolleyHttpService(this))
+
+        mainPresenter?.setupParse()
 
         val resultString = getClipBoardData()
         this.mainPresenter?.checkClipBoardValidation(resultString)
@@ -79,7 +81,7 @@ class MainActivity : AppCompatActivity(), IMainView {
         return resultString
     }
 
-    override fun showLink(link: String) {
+    override fun showDialog(link: String) {
         Log.e(CLIPBOARD_TAG, link)
 
         val dialog: AlertDialog.Builder = AlertDialog.Builder(this)
@@ -100,5 +102,9 @@ class MainActivity : AppCompatActivity(), IMainView {
 
     override fun setSiteListData(data: ArrayList<HashMap<String, Any>>) {
         datas.addAll(data)
+    }
+
+    override fun showSaveScreenWithTitle(title: String, url: String) {
+        Log.d(this.javaClass.name, "title: $title, url: $url")
     }
 }

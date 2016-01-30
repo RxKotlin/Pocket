@@ -1,9 +1,12 @@
-package com.kotlinchina.smallpockets.presenter
+package com.kotlinchina.smallpockets.presenter.impl
 
 import android.content.Context
 import android.util.Log
+import cn.wanghaomiao.xpath.model.JXDocument
+import com.kotlinchina.smallpockets.presenter.IMainPresenter
 import com.kotlinchina.smallpockets.service.HttpService
 import com.kotlinchina.smallpockets.view.IMainView
+import com.parse.Parse
 import java.net.MalformedURLException
 import java.net.URL
 import kotlin.collections.arrayListOf
@@ -22,18 +25,20 @@ class MainPresenter(mainView: IMainView, context: Context, httpService: HttpServ
     }
 
     override fun checkClipBoardValidation(clipboardString: String) {
-        val url = try { URL(clipboardString) } catch (e: MalformedURLException) {
+        val url = try {
+            URL(clipboardString)
+        } catch (e: MalformedURLException) {
             this.mainView.showNoLinkWithMsg("Invalid String")
             return
         }
 
-        this.mainView.showLink("${url.toString()}")
+        this.mainView.showDialog("${url.toString()}")
     }
 
     override fun loadSiteListData() {
         //相当于java中的lsitView添加HashMap，非常好用
         var data = arrayListOf(
-                hashMapOf<String,Any>(
+                hashMapOf<String, Any>(
                         "name" to "Android技术相关",
                         "tags" to arrayListOf(
                                 "自定义View",
@@ -41,7 +46,7 @@ class MainPresenter(mainView: IMainView, context: Context, httpService: HttpServ
                                 "图形界面"
                         )
                 ),
-                hashMapOf<String,Any>(
+                hashMapOf<String, Any>(
                         "name" to "美女图片",
                         "tags" to arrayListOf(
                                 "美女",
@@ -51,7 +56,7 @@ class MainPresenter(mainView: IMainView, context: Context, httpService: HttpServ
                                 "美丽"
                         )
                 ),
-                hashMapOf<String,Any>(
+                hashMapOf<String, Any>(
                         "name" to "汽车之家",
                         "tags" to arrayListOf(
                                 "新款",
@@ -82,18 +87,22 @@ class MainPresenter(mainView: IMainView, context: Context, httpService: HttpServ
     }
 
     override fun getTitleWithURL(url: String) {
-        fun titleFromData(t: String): String {
-            val start = t?.indexOf("<title>")
-            val end = t?.indexOf("</title>")
-            return t?.subSequence(start + 7, end) as String
+        fun titleFromData(t: String): String? {
+            val title = JXDocument(t).sel("//title/text()").first()
+            return title as? String
         }
 
-        httpService?.fetchDataWithUrl(url)
+        httpService.fetchDataWithUrl(url)
                 .map { t ->
                     titleFromData(t)
                 }
                 .subscribe { title ->
-                    Log.e("=======title", title)
+                    if (title != null) mainView.showSaveScreenWithTitle(title, url)
                 }
+    }
+
+    override fun setupParse() {
+        Parse.enableLocalDatastore(context)
+        Parse.initialize(context)
     }
 }
