@@ -17,6 +17,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".view.impl.SaveTagActivity"
+            android:theme="@android:style/Theme.Holo.Dialog.NoActionBar" />
         <!-- Parse -->
         <meta-data
             android:name="com.parse.APPLICATION_ID"
