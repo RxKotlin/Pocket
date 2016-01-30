@@ -1,4 +1,4 @@
-package com.kotlinchina.smallpockets.view
+package com.kotlinchina.smallpockets.view.impl
 
 import android.content.ClipData
 import android.content.ClipboardManager
@@ -14,6 +14,7 @@ import com.kotlinchina.smallpockets.adapter.ShowSiteListAdapter
 import com.kotlinchina.smallpockets.presenter.IMainPresenter
 import com.kotlinchina.smallpockets.presenter.impl.MainPresenter
 import com.kotlinchina.smallpockets.service.impl.VolleyHttpService
+import com.kotlinchina.smallpockets.view.IMainView
 import java.util.*
 
 
@@ -27,7 +28,7 @@ class MainActivity : AppCompatActivity(), IMainView {
 
     val datas = ArrayList<HashMap<String, Any>>()
 
-    var adapter:ShowSiteListAdapter<HashMap<String,Any>>? = null
+    var adapter: ShowSiteListAdapter<HashMap<String, Any>>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,12 +49,12 @@ class MainActivity : AppCompatActivity(), IMainView {
 
     private fun setOnclickListener() {
         listview?.setOnItemClickListener { adapterView, view, i, l ->
-            Toast.makeText(this@MainActivity,"show detail"+ ": position" +l,Toast.LENGTH_SHORT).show()
+            Toast.makeText(this@MainActivity,"show detail"+ ": position" +l, Toast.LENGTH_SHORT).show()
         }
     }
 
     private fun initData() {
-        adapter = ShowSiteListAdapter(this,datas)
+        adapter = ShowSiteListAdapter(this, datas)
         listview?.adapter = adapter
 
     }
