@@ -44,13 +44,16 @@ class MainActivity : AppCompatActivity(), IMainView {
 
         mainPresenter?.setupParse()
 
-        val resultString = getClipBoardData()
-        this.mainPresenter?.checkClipBoardValidation(resultString)
-        this.mainPresenter?.loadSiteListData()
-
+        checkURL()
         initView()
         initData()
         setOnclickListener()
+    }
+
+    private fun checkURL() {
+        val resultString = getClipBoardData()
+        this.mainPresenter?.checkClipBoardValidation(resultString)
+        this.mainPresenter?.loadSiteListData()
     }
 
     private fun setOnclickListener() {
@@ -136,5 +139,10 @@ class MainActivity : AppCompatActivity(), IMainView {
 
         super.onActivityResult(requestCode, resultCode, data)
         saveData()
+    }
+
+    override fun onRestart() {
+        super.onRestart()
+        checkURL()
     }
 }
