@@ -115,6 +115,7 @@ class MainActivity : AppCompatActivity(), IMainView {
 
     override fun setSiteListData(data: ArrayList<HashMap<String, Any>>) {
         datas.addAll(data)
+        adapter?.notifyDataSetChanged()
     }
 
     override fun showSaveScreenWithTitle(title: String, url: String) {
