@@ -1,14 +1,11 @@
 package com.kotlinchina.smallpockets.presenter.impl
 
 import android.content.Context
-import android.util.Log
 import cn.wanghaomiao.xpath.model.JXDocument
 import com.kotlinchina.smallpockets.model.Link
-import com.kotlinchina.smallpockets.model.Tag
 import com.kotlinchina.smallpockets.model.db.RealmLink
 import com.kotlinchina.smallpockets.model.db.RealmTag
 import com.kotlinchina.smallpockets.model.impl.CoreLink
-import com.kotlinchina.smallpockets.model.impl.CoreTag
 import com.kotlinchina.smallpockets.presenter.IMainPresenter
 import com.kotlinchina.smallpockets.service.HttpService
 import com.kotlinchina.smallpockets.view.IMainView
@@ -16,7 +13,6 @@ import io.realm.Realm
 import io.realm.RealmConfiguration
 import java.net.MalformedURLException
 import java.net.URL
-import java.util.*
 import kotlin.collections.arrayListOf
 import kotlin.collections.hashMapOf
 
