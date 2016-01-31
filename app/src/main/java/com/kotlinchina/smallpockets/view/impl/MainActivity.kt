@@ -1,23 +1,30 @@
-package com.kotlinchina.smallpockets.view
+package com.kotlinchina.smallpockets.view.impl
 
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.widget.ListView
+import android.widget.Switch
 import android.widget.Toast
 import com.kotlinchina.smallpockets.R
 import com.kotlinchina.smallpockets.adapter.ShowSiteListAdapter
 import com.kotlinchina.smallpockets.presenter.IMainPresenter
 import com.kotlinchina.smallpockets.presenter.impl.MainPresenter
 import com.kotlinchina.smallpockets.service.impl.VolleyHttpService
+import com.kotlinchina.smallpockets.view.IMainView
 import java.util.*
 
 
 class MainActivity : AppCompatActivity(), IMainView {
+
+    companion object {
+        val SAVE_TAGS = 1000
+    }
 
     val CLIPBOARD_TAG: String = "CLIPBOARD"
 
@@ -27,7 +34,7 @@ class MainActivity : AppCompatActivity(), IMainView {
 
     val datas = ArrayList<HashMap<String, Any>>()
 
-    var adapter:ShowSiteListAdapter<HashMap<String,Any>>? = null
+    var adapter: ShowSiteListAdapter<HashMap<String, Any>>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,23 +44,26 @@ class MainActivity : AppCompatActivity(), IMainView {
 
         mainPresenter?.setupParse()
 
-        val resultString = getClipBoardData()
-        this.mainPresenter?.checkClipBoardValidation(resultString)
-        this.mainPresenter?.loadSiteListData()
-
+        checkURL()
         initView()
         initData()
         setOnclickListener()
     }
 
+    private fun checkURL() {
+        val resultString = getClipBoardData()
+        this.mainPresenter?.checkClipBoardValidation(resultString)
+        this.mainPresenter?.loadSiteListData()
+    }
+
     private fun setOnclickListener() {
         listview?.setOnItemClickListener { adapterView, view, i, l ->
-            Toast.makeText(this@MainActivity,"show detail"+ ": position" +l,Toast.LENGTH_SHORT).show()
+            Toast.makeText(this@MainActivity,"show detail"+ ": position" +l, Toast.LENGTH_SHORT).show()
         }
     }
 
     private fun initData() {
-        adapter = ShowSiteListAdapter(this,datas)
+        adapter = ShowSiteListAdapter(this, datas)
         listview?.adapter = adapter
 
     }
@@ -105,6 +115,34 @@ class MainActivity : AppCompatActivity(), IMainView {
     }
 
     override fun showSaveScreenWithTitle(title: String, url: String) {
-        Log.d(this.javaClass.name, "title: $title, url: $url")
+        val intent = Intent(this@MainActivity, SaveTagActivity::class.java)
+        intent.putExtra(SaveTagActivity.TITLE, title)
+        intent.putExtra(SaveTagActivity.URL, url)
+        startActivityForResult(intent, SAVE_TAGS)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        fun saveData() {
+            if (resultCode == RESULT_OK) {
+                when (requestCode) {
+                    SAVE_TAGS -> {
+                        val tags = data?.getStringArrayExtra(SaveTagActivity.TAGS)
+                        if (tags != null) {
+                            for (tag in tags) {
+                                Log.e("This", "$tag")
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        super.onActivityResult(requestCode, resultCode, data)
+        saveData()
+    }
+
+    override fun onRestart() {
+        super.onRestart()
+        checkURL()
     }
 }
