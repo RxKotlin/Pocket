@@ -13,6 +13,7 @@ import io.realm.Realm
 import io.realm.RealmConfiguration
 import java.net.MalformedURLException
 import java.net.URL
+import java.util.*
 import kotlin.collections.arrayListOf
 import kotlin.collections.hashMapOf
 
@@ -123,6 +124,19 @@ class MainPresenter(mainView: IMainView, context: Context, httpService: HttpServ
             }
         }
 
+        fun loadDB(): ArrayList<HashMap<String, Any>> {
+            return arrayListOf(
+                    hashMapOf<String, Any>(
+                            "name" to "百度一下，你就知道",
+                            "tags" to arrayListOf(
+                                    "搜索",
+                                    "中文"
+                            )
+                    )
+            )
+        }
+
         realmLinkWithLink(CoreLink(title, url, tags))
+        this.mainView.setSiteListData(loadDB())
     }
 }
