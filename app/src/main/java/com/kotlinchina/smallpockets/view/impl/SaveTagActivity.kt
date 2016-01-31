@@ -1,6 +1,7 @@
 package com.kotlinchina.smallpockets.view.impl
 
 import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
@@ -28,13 +29,26 @@ class SaveTagActivity : Activity() {
 
     private fun setupView() {
         fun setupSaveButton() {
-            fun saveTags() {
-                val tags = saveTagGroup?.tags
-                if (tags != null) {
-                    val bundle = Bundle()
-                    bundle.putStringArray(TAGS, tags)
-                    intent.putExtras(bundle)
+            fun backActivity() {
+                fun intentWithData(): Intent? {
+                    val title = titleTV?.text
+                    val url = linkTV?.text
+                    val tags = saveTagGroup?.tags
 
+                    if (title != null
+                            && url != null
+                            && tags != null) {
+                        val intent = Intent()
+                        intent.putExtra(TITLE, title)
+                        intent.putExtra(URL, url)
+                        intent.putExtra(TAGS, tags)
+                        return intent
+                    }
+                    return null
+                }
+
+                val intent = intentWithData()
+                if (intent != null) {
                     setResult(RESULT_OK, intent)
                     finish()
                 }
@@ -42,7 +56,7 @@ class SaveTagActivity : Activity() {
 
             saveButton = findViewById(R.id.save_button) as? Button
             saveButton?.setOnClickListener {
-                saveTags()
+                backActivity()
             }
         }
 
