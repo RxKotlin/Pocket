@@ -1,6 +1,7 @@
 package com.kotlinchina.smallpockets.model.impl
 
 import com.kotlinchina.smallpockets.model.Link
+import com.kotlinchina.smallpockets.model.Tag
 import com.parse.ParseObject
 import java.util.*
 
@@ -26,5 +27,9 @@ class ParseLink: ParseObject(), Link {
         get() = getDate(kLINK_CREATE_DATE)
         set(value) {
             put(kLINK_CREATE_DATE, createDate)
+        }
+    override var tags: ArrayList<Tag>?
+        get() = throw UnsupportedOperationException()
+        set(value) {
         }
 }

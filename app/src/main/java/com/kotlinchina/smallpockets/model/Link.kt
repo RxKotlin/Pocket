@@ -9,4 +9,5 @@ interface Link {
     var url: String?
     var title: String?
     var createDate: Date?
+    var tags: ArrayList<Tag>?
 }

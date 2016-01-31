@@ -13,10 +13,15 @@ import android.widget.Switch
 import android.widget.Toast
 import com.kotlinchina.smallpockets.R
 import com.kotlinchina.smallpockets.adapter.ShowSiteListAdapter
+import com.kotlinchina.smallpockets.model.db.RealmLink
+import com.kotlinchina.smallpockets.model.db.RealmTag
+import com.kotlinchina.smallpockets.model.impl.CoreLink
 import com.kotlinchina.smallpockets.presenter.IMainPresenter
 import com.kotlinchina.smallpockets.presenter.impl.MainPresenter
 import com.kotlinchina.smallpockets.service.impl.VolleyHttpService
 import com.kotlinchina.smallpockets.view.IMainView
+import io.realm.Realm
+import io.realm.RealmConfiguration
 import java.util.*
 
 
@@ -126,11 +131,13 @@ class MainActivity : AppCompatActivity(), IMainView {
             if (resultCode == RESULT_OK) {
                 when (requestCode) {
                     SAVE_TAGS -> {
+                        val title = data?.getStringExtra(SaveTagActivity.TITLE)
+                        val url = data?.getStringExtra(SaveTagActivity.URL)
                         val tags = data?.getStringArrayExtra(SaveTagActivity.TAGS)
-                        if (tags != null) {
-                            for (tag in tags) {
-                                Log.e("This", "$tag")
-                            }
+                        if (title != null
+                                && url != null
+                                && tags != null) {
+                            mainPresenter?.saveToDB(title, url, tags)
                         }
                     }
                 }
