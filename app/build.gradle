@@ -37,9 +37,16 @@ dependencies {
     compile 'com.parse:parse-android:1.+'
     // JsoupXpath
     compile 'cn.wanghaomiao:JsoupXpath:0.2.2'
+    // Realm
+    compile "io.realm:realm-android-library:${realm_version}@aar"
+    compile "io.realm:realm-annotations:${realm_version}"
+    kapt "io.realm:realm-annotations:${realm_version}"
+    kapt "io.realm:realm-annotations-processor:${realm_version}"
 }
 buildscript {
     ext.kotlin_version = '1.0.0-beta-4584'
+    // Realm
+    ext.realm_version = '0.87.4'
     repositories {
         mavenCentral()
     }
