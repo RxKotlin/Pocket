@@ -19,13 +19,6 @@
         </activity>
         <activity android:name=".view.impl.SaveTagActivity"
             android:theme="@android:style/Theme.Holo.Dialog.NoActionBar" />
-        <!-- Parse -->
-        <meta-data
-            android:name="com.parse.APPLICATION_ID"
-            android:value="oTRwwSFTDxQ2YfIJw9WzXCw8lDAkcfo32Blft8Ov" />
-        <meta-data
-            android:name="com.parse.CLIENT_KEY"
-            android:value="GsXvINjThpf1dM1SduMgjhAQ7LzQARdF6aHTFwv5" />
     </application>
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />

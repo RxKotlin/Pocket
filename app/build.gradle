@@ -32,14 +32,18 @@ dependencies {
     compile 'me.gujun.android.taggroup:library:1.4@aar'
     compile 'com.mcxiaoke.volley:library:1.0.19'
     compile 'io.reactivex:rxkotlin:0.30.1'
-    // Parse
-    compile 'com.parse.bolts:bolts-android:1.+'
-    compile 'com.parse:parse-android:1.+'
     // JsoupXpath
     compile 'cn.wanghaomiao:JsoupXpath:0.2.2'
+    // Realm
+    compile "io.realm:realm-android-library:${realm_version}@aar"
+    compile "io.realm:realm-annotations:${realm_version}"
+    kapt "io.realm:realm-annotations:${realm_version}"
+    kapt "io.realm:realm-annotations-processor:${realm_version}"
 }
 buildscript {
     ext.kotlin_version = '1.0.0-beta-4584'
+    // Realm
+    ext.realm_version = '0.87.4'
     repositories {
         mavenCentral()
     }

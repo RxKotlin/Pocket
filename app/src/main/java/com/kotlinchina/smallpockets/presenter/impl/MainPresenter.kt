@@ -1,12 +1,16 @@
 package com.kotlinchina.smallpockets.presenter.impl
 
 import android.content.Context
-import android.util.Log
 import cn.wanghaomiao.xpath.model.JXDocument
+import com.kotlinchina.smallpockets.model.Link
+import com.kotlinchina.smallpockets.model.db.RealmLink
+import com.kotlinchina.smallpockets.model.db.RealmTag
+import com.kotlinchina.smallpockets.model.impl.CoreLink
 import com.kotlinchina.smallpockets.presenter.IMainPresenter
 import com.kotlinchina.smallpockets.service.HttpService
 import com.kotlinchina.smallpockets.view.IMainView
-import com.parse.Parse
+import io.realm.Realm
+import io.realm.RealmConfiguration
 import java.net.MalformedURLException
 import java.net.URL
 import kotlin.collections.arrayListOf
@@ -101,8 +105,24 @@ class MainPresenter(mainView: IMainView, context: Context, httpService: HttpServ
                 }
     }
 
-    override fun setupParse() {
-        Parse.enableLocalDatastore(context)
-        Parse.initialize(context)
+    override fun saveToDB(title: String, url: String, tags: Array<String>) {
+        fun realmLinkWithLink(link: Link) {
+            val config = RealmConfiguration.Builder(context).build()
+            val realm = Realm.getInstance(config)
+            realm.executeTransaction {
+                val realmLink = realm.createObject(RealmLink::class.java)
+                realmLink.title = link.title
+                realmLink.url = link.url
+                realmLink.createDate = link.createDate
+                link.tags?.forEach { it ->
+                    val realmTag = realm.createObject(RealmTag::class.java)
+                    realmTag.name = it.name
+                    realmLink.tags?.add(realmTag)
+                }
+                realm.copyFromRealm(realmLink)
+            }
+        }
+
+        realmLinkWithLink(CoreLink(title, url, tags))
     }
 }
