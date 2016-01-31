@@ -15,6 +15,8 @@ import java.net.MalformedURLException
 import java.net.URL
 import java.util.*
 import kotlin.collections.arrayListOf
+import kotlin.collections.first
+import kotlin.collections.forEach
 import kotlin.collections.hashMapOf
 
 class MainPresenter(mainView: IMainView, context: Context, httpService: HttpService): IMainPresenter {
