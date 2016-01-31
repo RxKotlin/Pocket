@@ -12,7 +12,6 @@ import com.kotlinchina.smallpockets.model.impl.CoreTag
 import com.kotlinchina.smallpockets.presenter.IMainPresenter
 import com.kotlinchina.smallpockets.service.HttpService
 import com.kotlinchina.smallpockets.view.IMainView
-import com.parse.Parse
 import io.realm.Realm
 import io.realm.RealmConfiguration
 import java.net.MalformedURLException
@@ -108,11 +107,6 @@ class MainPresenter(mainView: IMainView, context: Context, httpService: HttpServ
                 .subscribe { title ->
                     if (title != null) mainView.showSaveScreenWithTitle(title, url)
                 }
-    }
-
-    override fun setupParse() {
-        Parse.enableLocalDatastore(context)
-        Parse.initialize(context)
     }
 
     override fun saveToDB(title: String, url: String, tags: Array<String>) {

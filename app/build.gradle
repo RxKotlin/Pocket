@@ -32,9 +32,6 @@ dependencies {
     compile 'me.gujun.android.taggroup:library:1.4@aar'
     compile 'com.mcxiaoke.volley:library:1.0.19'
     compile 'io.reactivex:rxkotlin:0.30.1'
-    // Parse
-    compile 'com.parse.bolts:bolts-android:1.+'
-    compile 'com.parse:parse-android:1.+'
     // JsoupXpath
     compile 'cn.wanghaomiao:JsoupXpath:0.2.2'
     // Realm

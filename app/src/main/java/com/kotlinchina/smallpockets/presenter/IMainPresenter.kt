@@ -4,6 +4,5 @@ interface IMainPresenter {
     fun checkClipBoardValidation(clipboardString: String)
     fun loadSiteListData()
     fun getTitleWithURL(url: String)
-    fun setupParse()
     fun saveToDB(title: String, url: String, tags: Array<String>)
 }

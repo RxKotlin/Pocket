@@ -47,8 +47,6 @@ class MainActivity : AppCompatActivity(), IMainView {
 
         this.mainPresenter = MainPresenter(this, this, VolleyHttpService(this))
 
-        mainPresenter?.setupParse()
-
         checkURL()
         initView()
         initData()
