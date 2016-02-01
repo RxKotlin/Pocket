@@ -50,12 +50,12 @@ class MainActivity : AppCompatActivity(), IMainView {
     private fun checkURL() {
         val resultString = getClipBoardData()
         this.mainPresenter?.checkClipBoardValidation(resultString)
-        this.mainPresenter?.loadSiteListData()
+        //        this.mainPresenter?.loadSiteListData()
     }
 
     private fun setOnclickListener() {
         listview?.setOnItemClickListener { adapterView, view, i, l ->
-            Toast.makeText(this@MainActivity,"show detail"+ ": position" +l, Toast.LENGTH_SHORT).show()
+            Toast.makeText(this@MainActivity, "show detail" + ": position" + l, Toast.LENGTH_SHORT).show()
         }
     }
 
