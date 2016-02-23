@@ -9,19 +9,13 @@ import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.widget.ListView
-import android.widget.Switch
 import android.widget.Toast
 import com.kotlinchina.smallpockets.R
 import com.kotlinchina.smallpockets.adapter.ShowSiteListAdapter
-import com.kotlinchina.smallpockets.model.db.RealmLink
-import com.kotlinchina.smallpockets.model.db.RealmTag
-import com.kotlinchina.smallpockets.model.impl.CoreLink
 import com.kotlinchina.smallpockets.presenter.IMainPresenter
 import com.kotlinchina.smallpockets.presenter.impl.MainPresenter
 import com.kotlinchina.smallpockets.service.impl.VolleyHttpService
 import com.kotlinchina.smallpockets.view.IMainView
-import io.realm.Realm
-import io.realm.RealmConfiguration
 import java.util.*
 
 
@@ -39,7 +33,7 @@ class MainActivity : AppCompatActivity(), IMainView {
 
     val datas = ArrayList<HashMap<String, Any>>()
 
-    var adapter: ShowSiteListAdapter<HashMap<String, Any>>? = null
+    var adapter: ShowSiteListAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,9 +60,8 @@ class MainActivity : AppCompatActivity(), IMainView {
     }
 
     private fun initData() {
-        adapter = ShowSiteListAdapter(this, datas)
+        adapter = ShowSiteListAdapter(this, R.layout.show_site_list_item, datas)
         listview?.adapter = adapter
-
     }
 
     private fun initView() {

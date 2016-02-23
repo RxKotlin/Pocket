@@ -31,7 +31,7 @@ dependencies {
 
     compile 'me.gujun.android.taggroup:library:1.4@aar'
     compile 'com.mcxiaoke.volley:library:1.0.19'
-    compile 'io.reactivex:rxkotlin:0.30.1'
+    compile 'io.reactivex:rxkotlin:0.40.1'
     // JsoupXpath
     compile 'cn.wanghaomiao:JsoupXpath:0.2.2'
     // Realm
@@ -39,9 +39,11 @@ dependencies {
     compile "io.realm:realm-annotations:${realm_version}"
     kapt "io.realm:realm-annotations:${realm_version}"
     kapt "io.realm:realm-annotations-processor:${realm_version}"
+    // Adapter
+    compile 'com.joanzapata.android:base-adapter-helper:1.1.11'
 }
 buildscript {
-    ext.kotlin_version = '1.0.0-beta-4584'
+    ext.kotlin_version = '1.0.0'
     // Realm
     ext.realm_version = '0.87.4'
     repositories {
