@@ -1,6 +1,7 @@
 package com.kotlinchina.smallpockets.presenter.impl
 
 import android.content.Context
+import android.util.Log
 import cn.wanghaomiao.xpath.model.JXDocument
 import com.kotlinchina.smallpockets.model.Link
 import com.kotlinchina.smallpockets.model.db.RealmLink
@@ -10,7 +11,6 @@ import com.kotlinchina.smallpockets.presenter.IMainPresenter
 import com.kotlinchina.smallpockets.service.HttpService
 import com.kotlinchina.smallpockets.view.IMainView
 import io.realm.Realm
-import io.realm.RealmConfiguration
 import java.net.MalformedURLException
 import java.net.URL
 import java.util.*
@@ -109,9 +109,11 @@ class MainPresenter(mainView: IMainView, context: Context, httpService: HttpServ
     }
 
     override fun saveToDB(title: String, url: String, tags: Array<String>) {
+
         fun realmLinkWithLink(link: Link) {
-            val config = RealmConfiguration.Builder(context).build()
-            val realm = Realm.getInstance(config)
+
+            val realm = Realm.getDefaultInstance()
+
             realm.executeTransaction {
                 val realmLink = realm.createObject(RealmLink::class.java)
                 realmLink.title = link.title
@@ -127,6 +129,14 @@ class MainPresenter(mainView: IMainView, context: Context, httpService: HttpServ
         }
 
         fun loadDB(): ArrayList<HashMap<String, Any>> {
+
+//            val config = RealmConfiguration.Builder(context).build()
+            val realm = Realm.getDefaultInstance()
+
+            val results = realm.where(RealmLink::class.java).findAll()
+
+            Log.d("MainPresenter", "size: ${results.size}")
+
             return arrayListOf(
                     hashMapOf<String, Any>(
                             "name" to "百度一下，你就知道",
@@ -139,6 +149,7 @@ class MainPresenter(mainView: IMainView, context: Context, httpService: HttpServ
         }
 
         realmLinkWithLink(CoreLink(title, url, tags))
-        this.mainView.setSiteListData(loadDB())
+        //不需要调用界面刷新的方法了，realm会在数据变化的时候，自动通知到adapter刷新页面
+//        this.mainView.setSiteListData(loadDB())
     }
 }

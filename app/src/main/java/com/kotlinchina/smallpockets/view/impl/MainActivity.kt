@@ -17,6 +17,7 @@ import com.kotlinchina.smallpockets.presenter.impl.MainPresenter
 import com.kotlinchina.smallpockets.service.impl.VolleyHttpService
 import com.kotlinchina.smallpockets.view.IMainView
 import java.util.*
+import kotlin.properties.Delegates
 
 
 class MainActivity : AppCompatActivity(), IMainView {
@@ -27,6 +28,7 @@ class MainActivity : AppCompatActivity(), IMainView {
 
     val CLIPBOARD_TAG: String = "CLIPBOARD"
 
+    var realm: Realm  by Delegates.notNull()
     var mainPresenter: IMainPresenter? = null
 
     var listview: ListView? = null
@@ -39,6 +41,7 @@ class MainActivity : AppCompatActivity(), IMainView {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        realm = Realm.getDefaultInstance()
         this.mainPresenter = MainPresenter(this, this, VolleyHttpService(this))
 
         checkURL()
@@ -50,12 +53,12 @@ class MainActivity : AppCompatActivity(), IMainView {
     private fun checkURL() {
         val resultString = getClipBoardData()
         this.mainPresenter?.checkClipBoardValidation(resultString)
-        this.mainPresenter?.loadSiteListData()
+        //        this.mainPresenter?.loadSiteListData()
     }
 
     private fun setOnclickListener() {
         listview?.setOnItemClickListener { adapterView, view, i, l ->
-            Toast.makeText(this@MainActivity,"show detail"+ ": position" +l, Toast.LENGTH_SHORT).show()
+            Toast.makeText(this@MainActivity, "show detail" + ": position" + l, Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -143,5 +146,10 @@ class MainActivity : AppCompatActivity(), IMainView {
     override fun onRestart() {
         super.onRestart()
         checkURL()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        realm.close()
     }
 }

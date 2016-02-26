@@ -76,5 +76,8 @@ class SaveTagActivity : Activity() {
         setupLinkTV()
         setupTitleTV()
         saveTagGroup = findViewById(R.id.save_tag_group) as? TagGroup
+
+        //测试添加的tag
+        saveTagGroup?.setTags(arrayListOf("tag1", "tag2"))
     }
 }
