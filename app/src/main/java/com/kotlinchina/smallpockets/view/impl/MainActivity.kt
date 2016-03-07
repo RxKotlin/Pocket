@@ -13,11 +13,11 @@ import android.widget.Toast
 import com.kotlinchina.smallpockets.BuildConfig
 import com.kotlinchina.smallpockets.R
 import com.kotlinchina.smallpockets.adapter.ShowSiteListAdapter
+import com.kotlinchina.smallpockets.model.Link
 import com.kotlinchina.smallpockets.presenter.IMainPresenter
 import com.kotlinchina.smallpockets.presenter.impl.MainPresenter
 import com.kotlinchina.smallpockets.service.impl.VolleyHttpService
 import com.kotlinchina.smallpockets.view.IMainView
-import java.util.*
 
 
 class MainActivity : AppCompatActivity(), IMainView {
@@ -32,7 +32,7 @@ class MainActivity : AppCompatActivity(), IMainView {
 
     var listview: ListView? = null
 
-    val datas = ArrayList<HashMap<String, Any>>()
+    val datas: MutableList<Link>? = null
 
     var adapter: ShowSiteListAdapter? = null
 
@@ -43,7 +43,6 @@ class MainActivity : AppCompatActivity(), IMainView {
         this.mainPresenter = MainPresenter(this, applicationContext, VolleyHttpService(this))
 
         initView()
-        initData()
         setOnclickListener()
     }
 
@@ -56,11 +55,6 @@ class MainActivity : AppCompatActivity(), IMainView {
         listview?.setOnItemClickListener { adapterView, view, i, l ->
             Toast.makeText(this@MainActivity,"show detail"+ ": position" +l, Toast.LENGTH_SHORT).show()
         }
-    }
-
-    private fun initData() {
-        adapter = ShowSiteListAdapter(this, R.layout.show_site_list_item, datas)
-        listview?.adapter = adapter
     }
 
     private fun initView() {
@@ -110,9 +104,9 @@ class MainActivity : AppCompatActivity(), IMainView {
         Log.e(CLIPBOARD_TAG, msg)
     }
 
-    override fun setSiteListData(data: ArrayList<HashMap<String, Any>>) {
-        datas.addAll(data)
-        adapter = ShowSiteListAdapter(this, R.layout.show_site_list_item, datas)
+    override fun setSiteListData(data: List<Link>) {
+        datas?.clear()
+        adapter = ShowSiteListAdapter(this, R.layout.show_site_list_item, data)
         listview?.adapter = adapter
     }
 
@@ -134,7 +128,7 @@ class MainActivity : AppCompatActivity(), IMainView {
                         if (title != null
                                 && url != null
                                 && tags != null) {
-                            mainPresenter?.saveToDB(title, url, tags)
+                            mainPresenter?.saveToDB(title, url, tags.asList())
                         }
                     }
                 }

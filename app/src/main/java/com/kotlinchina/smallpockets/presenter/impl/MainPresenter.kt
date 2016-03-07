@@ -3,6 +3,7 @@ package com.kotlinchina.smallpockets.presenter.impl
 import android.content.Context
 import cn.wanghaomiao.xpath.model.JXDocument
 import com.kotlinchina.smallpockets.model.Link
+import com.kotlinchina.smallpockets.model.Tag
 import com.kotlinchina.smallpockets.model.db.RealmLink
 import com.kotlinchina.smallpockets.model.db.RealmTag
 import com.kotlinchina.smallpockets.model.impl.CoreLink
@@ -10,15 +11,12 @@ import com.kotlinchina.smallpockets.presenter.IMainPresenter
 import com.kotlinchina.smallpockets.service.HttpService
 import com.kotlinchina.smallpockets.view.IMainView
 import io.realm.Realm
-import io.realm.RealmConfiguration
-import io.realm.RealmList
 import java.net.MalformedURLException
 import java.net.URL
 import java.util.*
 import kotlin.collections.arrayListOf
 import kotlin.collections.first
 import kotlin.collections.forEach
-import kotlin.collections.hashMapOf
 
 class MainPresenter(mainView: IMainView, context: Context, httpService: HttpService): IMainPresenter {
 
@@ -58,7 +56,7 @@ class MainPresenter(mainView: IMainView, context: Context, httpService: HttpServ
                 }
     }
 
-    override fun saveToDB(title: String, url: String, tags: Array<String>) {
+    override fun saveToDB(title: String, url: String, tags: List<String>) {
         fun realmLinkWithLink(link: Link) {
             val realm = Realm.getDefaultInstance()
             realm.executeTransaction {
@@ -80,32 +78,19 @@ class MainPresenter(mainView: IMainView, context: Context, httpService: HttpServ
         this.mainView.setSiteListData(loadDB())
     }
 
-    fun loadDB(): ArrayList<HashMap<String, Any>> {
+    fun loadDB(): List<Link> {
         val realm = Realm.getDefaultInstance()
         val query = realm.where(RealmLink::class.java)
         val queryResults = query.findAll()
 
-        var returnResults = ArrayList<HashMap<String, Any>>()
-
-        for (item in queryResults) {
-            var itemResult = HashMap<String, Any>()
-            itemResult["name"] = item.title ?: "unknown"
-            if (item.tags == null) {
-                itemResult["tags"] = arrayListOf("unknown")
-            } else {
-                var tags = ArrayList<String>()
-                for (tag in item.tags!!) {
-                    tags.add(tag.name ?: "unknown")
-                }
-                if (tags.size == 0) {
-                    tags.add("unknown")
-                }
-                itemResult["tags"] = tags
+        return queryResults.map { link ->
+            val title = link.title ?: ""
+            val url = link.url ?: ""
+            val tags = link.tags?.map { tag ->
+                tag.name ?: ""
             }
-            returnResults.add(itemResult)
+            CoreLink(title, url, tags)
         }
-
-        return returnResults
     }
 
     override fun refreshList() {

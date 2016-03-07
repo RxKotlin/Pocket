@@ -1,10 +1,10 @@
 package com.kotlinchina.smallpockets.view
 
-import java.util.*
+import com.kotlinchina.smallpockets.model.Link
 
 interface IMainView {
     fun showDialog(link: String)
     fun showNoLinkWithMsg(msg: String)
-    fun setSiteListData(data: ArrayList<HashMap<String, Any>>)
+    fun setSiteListData(data: List<Link>)
     fun showSaveScreenWithTitle(title: String, url: String)
 }
