@@ -11,6 +11,7 @@ import com.kotlinchina.smallpockets.service.HttpService
 import com.kotlinchina.smallpockets.view.IMainView
 import io.realm.Realm
 import io.realm.RealmConfiguration
+import io.realm.RealmList
 import java.net.MalformedURLException
 import java.net.URL
 import java.util.*
@@ -42,57 +43,6 @@ class MainPresenter(mainView: IMainView, context: Context, httpService: HttpServ
         this.mainView.showDialog("${url.toString()}")
     }
 
-    override fun loadSiteListData() {
-        //相当于java中的lsitView添加HashMap，非常好用
-        var data = arrayListOf(
-                hashMapOf<String, Any>(
-                        "name" to "Android技术相关",
-                        "tags" to arrayListOf(
-                                "自定义View",
-                                "IT",
-                                "图形界面"
-                        )
-                ),
-                hashMapOf<String, Any>(
-                        "name" to "美女图片",
-                        "tags" to arrayListOf(
-                                "美女",
-                                "图片",
-                                "中国第一裸模",
-                                "苍老师",
-                                "美丽"
-                        )
-                ),
-                hashMapOf<String, Any>(
-                        "name" to "汽车之家",
-                        "tags" to arrayListOf(
-                                "新款",
-                                "兰坡基尼",
-                                "最爱"
-                        )
-                ),
-                hashMapOf<String, Any>(
-                        "name" to "软件之家",
-                        "tags" to arrayListOf(
-                                "锤子阅读",
-                                "掘金技术",
-                                "唱吧",
-                                "苏宁易购",
-                                "今日头条",
-                                "当当",
-                                "微博",
-                                "百词斩",
-                                "九个头条",
-                                "唯品会",
-                                "是男人就下100层"
-                        )
-                )
-
-        )
-        this.mainView.setSiteListData(data)
-
-    }
-
     override fun getTitleWithURL(url: String) {
         fun titleFromData(t: String): String? {
             val title = JXDocument(t).sel("//title/text()").first()
@@ -110,8 +60,7 @@ class MainPresenter(mainView: IMainView, context: Context, httpService: HttpServ
 
     override fun saveToDB(title: String, url: String, tags: Array<String>) {
         fun realmLinkWithLink(link: Link) {
-            val config = RealmConfiguration.Builder(context).build()
-            val realm = Realm.getInstance(config)
+            val realm = Realm.getDefaultInstance()
             realm.executeTransaction {
                 val realmLink = realm.createObject(RealmLink::class.java)
                 realmLink.title = link.title
@@ -126,19 +75,40 @@ class MainPresenter(mainView: IMainView, context: Context, httpService: HttpServ
             }
         }
 
-        fun loadDB(): ArrayList<HashMap<String, Any>> {
-            return arrayListOf(
-                    hashMapOf<String, Any>(
-                            "name" to "百度一下，你就知道",
-                            "tags" to arrayListOf(
-                                    "搜索",
-                                    "中文"
-                            )
-                    )
-            )
-        }
 
         realmLinkWithLink(CoreLink(title, url, tags))
+        this.mainView.setSiteListData(loadDB())
+    }
+
+    fun loadDB(): ArrayList<HashMap<String, Any>> {
+        val realm = Realm.getDefaultInstance()
+        val query = realm.where(RealmLink::class.java)
+        val queryResults = query.findAll()
+
+        var returnResults = ArrayList<HashMap<String, Any>>()
+
+        for (item in queryResults) {
+            var itemResult = HashMap<String, Any>()
+            itemResult["name"] = item.title ?: "unknown"
+            if (item.tags == null) {
+                itemResult["tags"] = arrayListOf("unknown")
+            } else {
+                var tags = ArrayList<String>()
+                for (tag in item.tags!!) {
+                    tags.add(tag.name ?: "unknown")
+                }
+                if (tags.size == 0) {
+                    tags.add("unknown")
+                }
+                itemResult["tags"] = tags
+            }
+            returnResults.add(itemResult)
+        }
+
+        return returnResults
+    }
+
+    override fun refreshList() {
         this.mainView.setSiteListData(loadDB())
     }
 }

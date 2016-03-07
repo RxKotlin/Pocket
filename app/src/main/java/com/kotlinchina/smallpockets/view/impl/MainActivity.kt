@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.widget.ListView
 import android.widget.Toast
+import com.kotlinchina.smallpockets.BuildConfig
 import com.kotlinchina.smallpockets.R
 import com.kotlinchina.smallpockets.adapter.ShowSiteListAdapter
 import com.kotlinchina.smallpockets.presenter.IMainPresenter
@@ -39,9 +40,8 @@ class MainActivity : AppCompatActivity(), IMainView {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        this.mainPresenter = MainPresenter(this, this, VolleyHttpService(this))
+        this.mainPresenter = MainPresenter(this, applicationContext, VolleyHttpService(this))
 
-        checkURL()
         initView()
         initData()
         setOnclickListener()
@@ -50,7 +50,6 @@ class MainActivity : AppCompatActivity(), IMainView {
     private fun checkURL() {
         val resultString = getClipBoardData()
         this.mainPresenter?.checkClipBoardValidation(resultString)
-        this.mainPresenter?.loadSiteListData()
     }
 
     private fun setOnclickListener() {
@@ -84,7 +83,11 @@ class MainActivity : AppCompatActivity(), IMainView {
             }
         }
 
-        return resultString
+        if (BuildConfig.DEBUG) {
+            return "http://www.baidu.com"
+        } else {
+            return resultString
+        }
     }
 
     override fun showDialog(link: String) {
@@ -98,6 +101,7 @@ class MainActivity : AppCompatActivity(), IMainView {
         })
         dialog.setNegativeButton("Cancel", { dialogInterface, i ->
             Log.d(CLIPBOARD_TAG, "Cancel")
+            mainPresenter?.refreshList()
         })
         dialog.show()
     }
@@ -108,7 +112,8 @@ class MainActivity : AppCompatActivity(), IMainView {
 
     override fun setSiteListData(data: ArrayList<HashMap<String, Any>>) {
         datas.addAll(data)
-        adapter?.notifyDataSetChanged()
+        adapter = ShowSiteListAdapter(this, R.layout.show_site_list_item, datas)
+        listview?.adapter = adapter
     }
 
     override fun showSaveScreenWithTitle(title: String, url: String) {
@@ -140,8 +145,8 @@ class MainActivity : AppCompatActivity(), IMainView {
         saveData()
     }
 
-    override fun onRestart() {
-        super.onRestart()
+    override fun onStart() {
+        super.onStart()
         checkURL()
     }
 }
