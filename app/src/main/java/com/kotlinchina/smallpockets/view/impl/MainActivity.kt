@@ -10,13 +10,14 @@ import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.widget.ListView
 import android.widget.Toast
+import com.kotlinchina.smallpockets.BuildConfig
 import com.kotlinchina.smallpockets.R
 import com.kotlinchina.smallpockets.adapter.ShowSiteListAdapter
+import com.kotlinchina.smallpockets.model.Link
 import com.kotlinchina.smallpockets.presenter.IMainPresenter
 import com.kotlinchina.smallpockets.presenter.impl.MainPresenter
 import com.kotlinchina.smallpockets.service.impl.VolleyHttpService
 import com.kotlinchina.smallpockets.view.IMainView
-import java.util.*
 
 
 class MainActivity : AppCompatActivity(), IMainView {
@@ -31,7 +32,7 @@ class MainActivity : AppCompatActivity(), IMainView {
 
     var listview: ListView? = null
 
-    val datas = ArrayList<HashMap<String, Any>>()
+    val datas: MutableList<Link>? = null
 
     var adapter: ShowSiteListAdapter? = null
 
@@ -39,29 +40,21 @@ class MainActivity : AppCompatActivity(), IMainView {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        this.mainPresenter = MainPresenter(this, this, VolleyHttpService(this))
+        this.mainPresenter = MainPresenter(this, applicationContext, VolleyHttpService(this))
 
-        checkURL()
         initView()
-        initData()
         setOnclickListener()
     }
 
     private fun checkURL() {
         val resultString = getClipBoardData()
         this.mainPresenter?.checkClipBoardValidation(resultString)
-        this.mainPresenter?.loadSiteListData()
     }
 
     private fun setOnclickListener() {
         listview?.setOnItemClickListener { adapterView, view, i, l ->
             Toast.makeText(this@MainActivity,"show detail"+ ": position" +l, Toast.LENGTH_SHORT).show()
         }
-    }
-
-    private fun initData() {
-        adapter = ShowSiteListAdapter(this, R.layout.show_site_list_item, datas)
-        listview?.adapter = adapter
     }
 
     private fun initView() {
@@ -84,7 +77,11 @@ class MainActivity : AppCompatActivity(), IMainView {
             }
         }
 
-        return resultString
+        if (BuildConfig.DEBUG) {
+            return "http://www.baidu.com"
+        } else {
+            return resultString
+        }
     }
 
     override fun showDialog(link: String) {
@@ -98,6 +95,7 @@ class MainActivity : AppCompatActivity(), IMainView {
         })
         dialog.setNegativeButton("Cancel", { dialogInterface, i ->
             Log.d(CLIPBOARD_TAG, "Cancel")
+            mainPresenter?.refreshList()
         })
         dialog.show()
     }
@@ -106,9 +104,10 @@ class MainActivity : AppCompatActivity(), IMainView {
         Log.e(CLIPBOARD_TAG, msg)
     }
 
-    override fun setSiteListData(data: ArrayList<HashMap<String, Any>>) {
-        datas.addAll(data)
-        adapter?.notifyDataSetChanged()
+    override fun setSiteListData(data: List<Link>) {
+        datas?.clear()
+        adapter = ShowSiteListAdapter(this, R.layout.show_site_list_item, data)
+        listview?.adapter = adapter
     }
 
     override fun showSaveScreenWithTitle(title: String, url: String) {
@@ -129,7 +128,7 @@ class MainActivity : AppCompatActivity(), IMainView {
                         if (title != null
                                 && url != null
                                 && tags != null) {
-                            mainPresenter?.saveToDB(title, url, tags)
+                            mainPresenter?.saveToDB(title, url, tags.asList())
                         }
                     }
                 }
@@ -140,8 +139,8 @@ class MainActivity : AppCompatActivity(), IMainView {
         saveData()
     }
 
-    override fun onRestart() {
-        super.onRestart()
+    override fun onStart() {
+        super.onStart()
         checkURL()
     }
 }
