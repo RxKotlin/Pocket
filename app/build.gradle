@@ -41,6 +41,8 @@ dependencies {
     kapt "io.realm:realm-annotations-processor:${realm_version}"
     // Adapter
     compile 'com.joanzapata.android:base-adapter-helper:1.1.11'
+    // Evernote
+    compile 'com.evernote:android-sdk:2.0.0-RC3'
 }
 buildscript {
     ext.kotlin_version = '1.0.0'
