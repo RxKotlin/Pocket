@@ -20,6 +20,9 @@
         </activity>
         <activity android:name=".view.impl.SaveTagActivity"
             android:theme="@android:style/Theme.Holo.Dialog.NoActionBar" />
+        <!-- Evernote -->
+        <activity android:name="com.evernote.client.android.EvernoteOAuthActivity" />
+        <activity android:name="com.evernote.client.android.login.EvernoteLoginActivity"/>
     </application>
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />

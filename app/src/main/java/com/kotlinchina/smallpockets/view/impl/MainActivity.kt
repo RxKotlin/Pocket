@@ -13,6 +13,7 @@ import android.widget.Toast
 import com.kotlinchina.smallpockets.BuildConfig
 import com.kotlinchina.smallpockets.R
 import com.kotlinchina.smallpockets.adapter.ShowSiteListAdapter
+import com.kotlinchina.smallpockets.application.PocketApplication
 import com.kotlinchina.smallpockets.model.Link
 import com.kotlinchina.smallpockets.presenter.IMainPresenter
 import com.kotlinchina.smallpockets.presenter.impl.MainPresenter
@@ -142,5 +143,14 @@ class MainActivity : AppCompatActivity(), IMainView {
     override fun onStart() {
         super.onStart()
         checkURL()
+        checkEvernoteLogin()
+    }
+
+    private fun checkEvernoteLogin() {
+        val everNoteSession = (application as? PocketApplication)?.everNoteSession
+        val logined = everNoteSession?.isLoggedIn
+        if (logined != null && !logined) {
+            everNoteSession?.authenticate(this)
+        }
     }
 }
