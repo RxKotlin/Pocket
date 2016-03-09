@@ -9,8 +9,10 @@ import com.kotlinchina.smallpockets.model.db.RealmTag
 import com.kotlinchina.smallpockets.model.impl.CoreLink
 import com.kotlinchina.smallpockets.presenter.IMainPresenter
 import com.kotlinchina.smallpockets.service.HttpService
+import com.kotlinchina.smallpockets.service.StoreService
 import com.kotlinchina.smallpockets.view.IMainView
 import io.realm.Realm
+import rx.functions.Action1
 import java.net.MalformedURLException
 import java.net.URL
 import java.util.*
@@ -18,16 +20,18 @@ import kotlin.collections.arrayListOf
 import kotlin.collections.first
 import kotlin.collections.forEach
 
-class MainPresenter(mainView: IMainView, context: Context, httpService: HttpService): IMainPresenter {
+class MainPresenter(mainView: IMainView, context: Context, httpService: HttpService, storeService: StoreService): IMainPresenter {
 
     var mainView: IMainView
     val context: Context
     val httpService: HttpService
+    val storeService: StoreService
 
     init {
         this.mainView = mainView
         this.context = context
         this.httpService = httpService
+        this.storeService = storeService
     }
 
     override fun checkClipBoardValidation(clipboardString: String) {
@@ -95,5 +99,13 @@ class MainPresenter(mainView: IMainView, context: Context, httpService: HttpServ
 
     override fun refreshList() {
         this.mainView.setSiteListData(loadDB())
+    }
+
+    override fun saveLinkToCloud(title: String, conent: String) {
+        storeService.store(title, conent).subscribe({
+            this.mainView.showSaveCloudResult(it.title!!)
+        }, {
+            this.mainView.showSaveCloudResult(it.message!!)
+        })
     }
 }
