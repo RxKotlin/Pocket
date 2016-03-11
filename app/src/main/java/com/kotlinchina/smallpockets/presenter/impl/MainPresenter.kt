@@ -1,29 +1,28 @@
 package com.kotlinchina.smallpockets.presenter.impl
 
 import android.content.Context
-import cn.wanghaomiao.xpath.model.JXDocument // TODO: need to refactor
 import com.kotlinchina.smallpockets.model.Link
-import com.kotlinchina.smallpockets.model.db.RealmLink // TODO: need to refactor
-import com.kotlinchina.smallpockets.model.db.RealmTag // TODO: need to refactor
+import com.kotlinchina.smallpockets.model.db.RealmLink
+import com.kotlinchina.smallpockets.model.db.RealmTag
 import com.kotlinchina.smallpockets.model.impl.CoreLink
 import com.kotlinchina.smallpockets.presenter.IMainPresenter
 import com.kotlinchina.smallpockets.service.ClipboardService
 import com.kotlinchina.smallpockets.service.HttpService
+import com.kotlinchina.smallpockets.service.IParseDom
 import com.kotlinchina.smallpockets.service.StoreService
 import com.kotlinchina.smallpockets.view.IMainView
-import io.realm.Realm // TODO: need to refactor
+import io.realm.Realm
 import java.net.MalformedURLException
 import java.net.URL
-import kotlin.collections.first
-import kotlin.collections.forEach
 
-class MainPresenter(mainView: IMainView, context: Context, httpService: HttpService, storeService: StoreService, clipboardService: ClipboardService): IMainPresenter {
+class MainPresenter(mainView: IMainView, context: Context, httpService: HttpService, storeService: StoreService, clipboardService: ClipboardService,iparseDom: IParseDom): IMainPresenter {
 
     var mainView: IMainView
     val context: Context
     val httpService: HttpService
     val storeService: StoreService
     val clipboardService: ClipboardService
+    val iparseDom: IParseDom
 
     init {
         this.mainView = mainView
@@ -31,17 +30,13 @@ class MainPresenter(mainView: IMainView, context: Context, httpService: HttpServ
         this.httpService = httpService
         this.storeService = storeService
         this.clipboardService = clipboardService
+        this.iparseDom = iparseDom
     }
 
     override fun getTitleWithURL(url: String) {
-        fun titleFromData(t: String): String? {
-            val title = JXDocument(t).sel("//title/text()").first()
-            return title as? String
-        }
-
         httpService.fetchDataWithUrl(url)
                 .map { t ->
-                    titleFromData(t)
+                    iparseDom.getTitle(t)
                 }
                 .subscribe { title ->
                     if (title != null) mainView.showSaveScreenWithTitle(title, url)

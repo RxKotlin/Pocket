@@ -16,10 +16,7 @@ import com.kotlinchina.smallpockets.application.PocketApplication
 import com.kotlinchina.smallpockets.model.Link
 import com.kotlinchina.smallpockets.presenter.IMainPresenter
 import com.kotlinchina.smallpockets.presenter.impl.MainPresenter
-import com.kotlinchina.smallpockets.service.impl.CacheClipboardService
-import com.kotlinchina.smallpockets.service.impl.DebugCacheClipboardService
-import com.kotlinchina.smallpockets.service.impl.EvernoteStoreService
-import com.kotlinchina.smallpockets.service.impl.VolleyHttpService
+import com.kotlinchina.smallpockets.service.impl.*
 import com.kotlinchina.smallpockets.view.IMainView
 
 
@@ -49,7 +46,8 @@ class MainActivity : AppCompatActivity(), IMainView {
                 context = applicationContext,
                 httpService = VolleyHttpService(this),
                 storeService = EvernoteStoreService(application),
-                clipboardService = clipboardService)
+                clipboardService = clipboardService,
+                iparseDom = JxPathParseDom())
 
         initView()
         setOnclickListener()
