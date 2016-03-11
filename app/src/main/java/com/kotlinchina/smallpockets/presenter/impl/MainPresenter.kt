@@ -3,19 +3,15 @@ package com.kotlinchina.smallpockets.presenter.impl
 import android.content.Context
 import com.kotlinchina.smallpockets.model.Link
 import com.kotlinchina.smallpockets.model.db.RealmLink
-import com.kotlinchina.smallpockets.model.db.RealmTag
 import com.kotlinchina.smallpockets.model.impl.CoreLink
 import com.kotlinchina.smallpockets.presenter.IMainPresenter
-import com.kotlinchina.smallpockets.service.ClipboardService
-import com.kotlinchina.smallpockets.service.HttpService
-import com.kotlinchina.smallpockets.service.IParseDom
-import com.kotlinchina.smallpockets.service.StoreService
+import com.kotlinchina.smallpockets.service.*
 import com.kotlinchina.smallpockets.view.IMainView
 import io.realm.Realm
 import java.net.MalformedURLException
 import java.net.URL
 
-class MainPresenter(mainView: IMainView, context: Context, httpService: HttpService, storeService: StoreService, clipboardService: ClipboardService,iparseDom: IParseDom): IMainPresenter {
+class MainPresenter(mainView: IMainView, context: Context, httpService: HttpService, storeService: StoreService, clipboardService: ClipboardService,iparseDom: IParseDom,iSaveUrlInfo: ISaveUrlInfo): IMainPresenter {
 
     var mainView: IMainView
     val context: Context
@@ -23,6 +19,7 @@ class MainPresenter(mainView: IMainView, context: Context, httpService: HttpServ
     val storeService: StoreService
     val clipboardService: ClipboardService
     val iparseDom: IParseDom
+    val iSaveUrlInfo: ISaveUrlInfo
 
     init {
         this.mainView = mainView
@@ -31,6 +28,7 @@ class MainPresenter(mainView: IMainView, context: Context, httpService: HttpServ
         this.storeService = storeService
         this.clipboardService = clipboardService
         this.iparseDom = iparseDom
+        this.iSaveUrlInfo = iSaveUrlInfo
     }
 
     override fun getTitleWithURL(url: String) {
@@ -44,24 +42,7 @@ class MainPresenter(mainView: IMainView, context: Context, httpService: HttpServ
     }
 
     override fun saveToDB(title: String, url: String, tags: List<String>) {
-        fun realmLinkWithLink(link: Link) {
-            val realm = Realm.getDefaultInstance()
-            realm.executeTransaction {
-                val realmLink = realm.createObject(RealmLink::class.java)
-                realmLink.title = link.title
-                realmLink.url = link.url
-                realmLink.createDate = link.createDate
-                link.tags?.forEach { it ->
-                    val realmTag = realm.createObject(RealmTag::class.java)
-                    realmTag.name = it.name
-                    realmLink.tags?.add(realmTag)
-                }
-                realm.copyFromRealm(realmLink)
-            }
-        }
-
-
-        realmLinkWithLink(CoreLink(title, url, tags))
+        iSaveUrlInfo.saveUrlInfoWithLink(CoreLink(title, url, tags))
         this.mainView.setSiteListData(loadDB())
     }
 
