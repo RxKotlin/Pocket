@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">SmallPockets</string>
+    <string name="main_action_settings">Save to Evernote</string>
 </resources>

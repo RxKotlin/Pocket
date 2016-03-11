@@ -8,8 +8,15 @@ import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
+import android.view.ContextMenu
+import android.view.Menu
+import android.view.MenuItem
+import android.view.View
 import android.widget.ListView
 import android.widget.Toast
+import com.evernote.client.android.EvernoteUtil
+import com.evernote.client.android.asyncclient.EvernoteCallback
+import com.evernote.edam.type.Note
 import com.kotlinchina.smallpockets.BuildConfig
 import com.kotlinchina.smallpockets.R
 import com.kotlinchina.smallpockets.adapter.ShowSiteListAdapter
@@ -17,6 +24,7 @@ import com.kotlinchina.smallpockets.application.PocketApplication
 import com.kotlinchina.smallpockets.model.Link
 import com.kotlinchina.smallpockets.presenter.IMainPresenter
 import com.kotlinchina.smallpockets.presenter.impl.MainPresenter
+import com.kotlinchina.smallpockets.service.impl.EvernoteStoreService
 import com.kotlinchina.smallpockets.service.impl.VolleyHttpService
 import com.kotlinchina.smallpockets.view.IMainView
 
@@ -41,7 +49,7 @@ class MainActivity : AppCompatActivity(), IMainView {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        this.mainPresenter = MainPresenter(this, applicationContext, VolleyHttpService(this))
+        this.mainPresenter = MainPresenter(this, applicationContext, VolleyHttpService(this), EvernoteStoreService(application))
 
         initView()
         setOnclickListener()
@@ -146,11 +154,25 @@ class MainActivity : AppCompatActivity(), IMainView {
         checkEvernoteLogin()
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_main, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        mainPresenter?.saveLinkToCloud("Fuck title", "Fuck content")
+        return true
+    }
+
     private fun checkEvernoteLogin() {
         val everNoteSession = (application as? PocketApplication)?.everNoteSession
         val logined = everNoteSession?.isLoggedIn
         if (logined != null && !logined) {
             everNoteSession?.authenticate(this)
         }
+    }
+
+    override fun showSaveCloudResult(message: String) {
+        Toast.makeText(this@MainActivity, message, Toast.LENGTH_SHORT).show()
     }
 }

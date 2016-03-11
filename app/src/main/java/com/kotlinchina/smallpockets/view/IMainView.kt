@@ -7,4 +7,5 @@ interface IMainView {
     fun showNoLinkWithMsg(msg: String)
     fun setSiteListData(data: List<Link>)
     fun showSaveScreenWithTitle(title: String, url: String)
+    fun showSaveCloudResult(message: String)
 }
