@@ -47,7 +47,8 @@ class MainActivity : AppCompatActivity(), IMainView {
                 httpService = VolleyHttpService(this),
                 storeService = EvernoteStoreService(application),
                 clipboardService = clipboardService,
-                iparseDom = JxPathParseDom())
+                iparseDom = JxPathParseDom(),
+                iSaveUrlInfo = RealmSavaUrlInfo())
 
         initView()
         setOnclickListener()
