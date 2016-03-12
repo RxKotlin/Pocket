@@ -1,22 +1,14 @@
 package com.kotlinchina.smallpockets.view.impl
 
-import android.content.ClipData
-import android.content.ClipboardManager
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
-import android.view.ContextMenu
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import android.widget.ListView
 import android.widget.Toast
-import com.evernote.client.android.EvernoteUtil
-import com.evernote.client.android.asyncclient.EvernoteCallback
-import com.evernote.edam.type.Note
 import com.kotlinchina.smallpockets.BuildConfig
 import com.kotlinchina.smallpockets.R
 import com.kotlinchina.smallpockets.adapter.ShowSiteListAdapter
@@ -24,8 +16,7 @@ import com.kotlinchina.smallpockets.application.PocketApplication
 import com.kotlinchina.smallpockets.model.Link
 import com.kotlinchina.smallpockets.presenter.IMainPresenter
 import com.kotlinchina.smallpockets.presenter.impl.MainPresenter
-import com.kotlinchina.smallpockets.service.impl.EvernoteStoreService
-import com.kotlinchina.smallpockets.service.impl.VolleyHttpService
+import com.kotlinchina.smallpockets.service.impl.*
 import com.kotlinchina.smallpockets.view.IMainView
 
 
@@ -49,15 +40,18 @@ class MainActivity : AppCompatActivity(), IMainView {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        this.mainPresenter = MainPresenter(this, applicationContext, VolleyHttpService(this), EvernoteStoreService(application))
+        val clipboardService = if (BuildConfig.DEBUG) DebugCacheClipboardService() else CacheClipboardService(this)
+
+        this.mainPresenter = MainPresenter(mainView = this,
+                context = applicationContext,
+                httpService = VolleyHttpService(this),
+                storeService = EvernoteStoreService(application),
+                clipboardService = clipboardService,
+                iparseDom = JxPathParseDom(),
+                iSaveUrlInfo = RealmSavaUrlInfo())
 
         initView()
         setOnclickListener()
-    }
-
-    private fun checkURL() {
-        val resultString = getClipBoardData()
-        this.mainPresenter?.checkClipBoardValidation(resultString)
     }
 
     private fun setOnclickListener() {
@@ -69,28 +63,6 @@ class MainActivity : AppCompatActivity(), IMainView {
     private fun initView() {
         listview = this.findViewById(R.id.listView) as ListView
 
-    }
-
-    private fun getClipBoardData(): String {
-        val clipboardManager: ClipboardManager =
-                getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-        var resultString: String = ""
-
-        if (clipboardManager.hasPrimaryClip()) {
-            val clipData: ClipData = clipboardManager.primaryClip
-            val clipDataCount = clipData.itemCount
-            for (index in 0..clipDataCount - 1) {
-                val item = clipData.getItemAt(index)
-                val str = item.coerceToText(this)
-                resultString += str
-            }
-        }
-
-        if (BuildConfig.DEBUG) {
-            return "http://www.baidu.com"
-        } else {
-            return resultString
-        }
     }
 
     override fun showDialog(link: String) {
@@ -150,7 +122,7 @@ class MainActivity : AppCompatActivity(), IMainView {
 
     override fun onStart() {
         super.onStart()
-        checkURL()
+        this.mainPresenter?.checkClipboard()
         checkEvernoteLogin()
     }
 

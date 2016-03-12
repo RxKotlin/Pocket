@@ -1,59 +1,40 @@
 package com.kotlinchina.smallpockets.presenter.impl
 
 import android.content.Context
-import cn.wanghaomiao.xpath.model.JXDocument
 import com.kotlinchina.smallpockets.model.Link
-import com.kotlinchina.smallpockets.model.Tag
 import com.kotlinchina.smallpockets.model.db.RealmLink
-import com.kotlinchina.smallpockets.model.db.RealmTag
 import com.kotlinchina.smallpockets.model.impl.CoreLink
 import com.kotlinchina.smallpockets.presenter.IMainPresenter
-import com.kotlinchina.smallpockets.service.HttpService
-import com.kotlinchina.smallpockets.service.StoreService
+import com.kotlinchina.smallpockets.service.*
 import com.kotlinchina.smallpockets.view.IMainView
 import io.realm.Realm
-import rx.functions.Action1
 import java.net.MalformedURLException
 import java.net.URL
-import java.util.*
-import kotlin.collections.arrayListOf
-import kotlin.collections.first
-import kotlin.collections.forEach
 
-class MainPresenter(mainView: IMainView, context: Context, httpService: HttpService, storeService: StoreService): IMainPresenter {
+class MainPresenter(mainView: IMainView, context: Context, httpService: HttpService, storeService: StoreService, clipboardService: ClipboardService,iparseDom: IParseDom,iSaveUrlInfo: ISaveUrlInfo): IMainPresenter {
 
     var mainView: IMainView
     val context: Context
     val httpService: HttpService
     val storeService: StoreService
+    val clipboardService: ClipboardService
+    val iparseDom: IParseDom
+    val iSaveUrlInfo: ISaveUrlInfo
 
     init {
         this.mainView = mainView
         this.context = context
         this.httpService = httpService
         this.storeService = storeService
-    }
-
-    override fun checkClipBoardValidation(clipboardString: String) {
-        val url = try {
-            URL(clipboardString)
-        } catch (e: MalformedURLException) {
-            this.mainView.showNoLinkWithMsg("Invalid String")
-            return
-        }
-
-        this.mainView.showDialog("${url.toString()}")
+        this.clipboardService = clipboardService
+        this.iparseDom = iparseDom
+        this.iSaveUrlInfo = iSaveUrlInfo
     }
 
     override fun getTitleWithURL(url: String) {
-        fun titleFromData(t: String): String? {
-            val title = JXDocument(t).sel("//title/text()").first()
-            return title as? String
-        }
-
         httpService.fetchDataWithUrl(url)
                 .map { t ->
-                    titleFromData(t)
+                    iparseDom.getTitle(t)
                 }
                 .subscribe { title ->
                     if (title != null) mainView.showSaveScreenWithTitle(title, url)
@@ -61,24 +42,7 @@ class MainPresenter(mainView: IMainView, context: Context, httpService: HttpServ
     }
 
     override fun saveToDB(title: String, url: String, tags: List<String>) {
-        fun realmLinkWithLink(link: Link) {
-            val realm = Realm.getDefaultInstance()
-            realm.executeTransaction {
-                val realmLink = realm.createObject(RealmLink::class.java)
-                realmLink.title = link.title
-                realmLink.url = link.url
-                realmLink.createDate = link.createDate
-                link.tags?.forEach { it ->
-                    val realmTag = realm.createObject(RealmTag::class.java)
-                    realmTag.name = it.name
-                    realmLink.tags?.add(realmTag)
-                }
-                realm.copyFromRealm(realmLink)
-            }
-        }
-
-
-        realmLinkWithLink(CoreLink(title, url, tags))
+        iSaveUrlInfo.saveUrlInfoWithLink(CoreLink(title, url, tags))
         this.mainView.setSiteListData(loadDB())
     }
 
@@ -107,5 +71,19 @@ class MainPresenter(mainView: IMainView, context: Context, httpService: HttpServ
         }, {
             this.mainView.showSaveCloudResult(it.message!!)
         })
+    }
+
+    override fun checkClipboard() {
+        fun checkClipBoardValidation(clipboardString: String) {
+            val url = try {
+                URL(clipboardString)
+            } catch (e: MalformedURLException) {
+                this.mainView.showNoLinkWithMsg("Invalid String")
+                return
+            }
+
+            this.mainView.showDialog("${url.toString()}")
+        }
+        checkClipBoardValidation(clipboardService.content())
     }
 }
