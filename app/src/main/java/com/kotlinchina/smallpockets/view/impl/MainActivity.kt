@@ -17,7 +17,9 @@ import com.kotlinchina.smallpockets.model.Link
 import com.kotlinchina.smallpockets.presenter.IMainPresenter
 import com.kotlinchina.smallpockets.presenter.impl.MainPresenter
 import com.kotlinchina.smallpockets.service.impl.*
+import com.kotlinchina.smallpockets.utils.RxManagerUtils
 import com.kotlinchina.smallpockets.view.IMainView
+import rx.Subscription
 
 
 class MainActivity : AppCompatActivity(), IMainView {
@@ -35,6 +37,8 @@ class MainActivity : AppCompatActivity(), IMainView {
     val datas: MutableList<Link>? = null
 
     var adapter: ShowSiteListAdapter? = null
+
+    var getTitleWidhUrlSubscription: Subscription? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,12 +73,12 @@ class MainActivity : AppCompatActivity(), IMainView {
         Log.e(CLIPBOARD_TAG, link)
 
         val dialog: AlertDialog.Builder = AlertDialog.Builder(this)
-        dialog.setTitle("需要保存此链接么？")
+        dialog.setTitle(R.string.save_link_ornot)
         dialog.setMessage(link)
-        dialog.setPositiveButton("OK", { dialogInterface, i ->
-            mainPresenter?.getTitleWithURL(link)
+        dialog.setPositiveButton(R.string.Ok, { dialogInterface, i ->
+            getTitleWidhUrlSubscription =  mainPresenter?.getTitleWithURL(link)
         })
-        dialog.setNegativeButton("Cancel", { dialogInterface, i ->
+        dialog.setNegativeButton(R.string.Cancel, { dialogInterface, i ->
             Log.d(CLIPBOARD_TAG, "Cancel")
             mainPresenter?.refreshList()
         })
@@ -146,5 +150,10 @@ class MainActivity : AppCompatActivity(), IMainView {
 
     override fun showSaveCloudResult(message: String) {
         Toast.makeText(this@MainActivity, message, Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        RxManagerUtils.unSubscribe(getTitleWidhUrlSubscription)
     }
 }
