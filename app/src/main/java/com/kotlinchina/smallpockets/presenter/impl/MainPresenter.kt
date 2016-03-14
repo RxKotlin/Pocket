@@ -1,13 +1,10 @@
 package com.kotlinchina.smallpockets.presenter.impl
 
 import android.content.Context
-import com.kotlinchina.smallpockets.model.Link
-import com.kotlinchina.smallpockets.model.db.RealmLink
 import com.kotlinchina.smallpockets.model.impl.CoreLink
 import com.kotlinchina.smallpockets.presenter.IMainPresenter
 import com.kotlinchina.smallpockets.service.*
 import com.kotlinchina.smallpockets.view.IMainView
-import io.realm.Realm
 import java.net.MalformedURLException
 import java.net.URL
 
@@ -43,26 +40,12 @@ class MainPresenter(mainView: IMainView, context: Context, httpService: HttpServ
 
     override fun saveToDB(title: String, url: String, tags: List<String>) {
         iSaveUrlInfo.saveUrlInfoWithLink(CoreLink(title, url, tags))
-        this.mainView.setSiteListData(loadDB())
+        this.mainView.setSiteListData(iSaveUrlInfo.loadData())
     }
 
-    fun loadDB(): List<Link> {
-        val realm = Realm.getDefaultInstance()
-        val query = realm.where(RealmLink::class.java)
-        val queryResults = query.findAll()
-
-        return queryResults.map { link ->
-            val title = link.title ?: ""
-            val url = link.url ?: ""
-            val tags = link.tags?.map { tag ->
-                tag.name ?: ""
-            }
-            CoreLink(title, url, tags)
-        }
-    }
 
     override fun refreshList() {
-        this.mainView.setSiteListData(loadDB())
+        this.mainView.setSiteListData(iSaveUrlInfo.loadData())
     }
 
     override fun saveLinkToCloud(title: String, conent: String) {
