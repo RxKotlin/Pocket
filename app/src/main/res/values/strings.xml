@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">SmallPockets</string>
     <string name="main_action_settings">Save to Evernote</string>
+    <string name="save_link_ornot">需要保存此链接么？</string>
+    <string name="Ok">Ok</string>
+    <string name="Cancel">Cancel</string>
 </resources>

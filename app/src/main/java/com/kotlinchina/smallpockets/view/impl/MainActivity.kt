@@ -48,7 +48,7 @@ class MainActivity : AppCompatActivity(), IMainView {
                 storeService = EvernoteStoreService(application),
                 clipboardService = clipboardService,
                 iparseDom = JxPathParseDom(),
-                iSaveUrlInfo = RealmSavaUrlInfo())
+                iSaveUrlInfo = RealmOperatorUrlInfo())
 
         initView()
         setOnclickListener()
@@ -69,12 +69,12 @@ class MainActivity : AppCompatActivity(), IMainView {
         Log.e(CLIPBOARD_TAG, link)
 
         val dialog: AlertDialog.Builder = AlertDialog.Builder(this)
-        dialog.setTitle("需要保存此链接么？")
+        dialog.setTitle(R.string.save_link_ornot)
         dialog.setMessage(link)
-        dialog.setPositiveButton("OK", { dialogInterface, i ->
-            mainPresenter?.getTitleWithURL(link)
+        dialog.setPositiveButton(R.string.Ok, { dialogInterface, i ->
+             mainPresenter?.getTitleWithURL(link)
         })
-        dialog.setNegativeButton("Cancel", { dialogInterface, i ->
+        dialog.setNegativeButton(R.string.Cancel, { dialogInterface, i ->
             Log.d(CLIPBOARD_TAG, "Cancel")
             mainPresenter?.refreshList()
         })
@@ -146,5 +146,9 @@ class MainActivity : AppCompatActivity(), IMainView {
 
     override fun showSaveCloudResult(message: String) {
         Toast.makeText(this@MainActivity, message, Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
     }
 }
