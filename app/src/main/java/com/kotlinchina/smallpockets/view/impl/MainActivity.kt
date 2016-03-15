@@ -17,9 +17,7 @@ import com.kotlinchina.smallpockets.model.Link
 import com.kotlinchina.smallpockets.presenter.IMainPresenter
 import com.kotlinchina.smallpockets.presenter.impl.MainPresenter
 import com.kotlinchina.smallpockets.service.impl.*
-import com.kotlinchina.smallpockets.utils.RxManagerUtils
 import com.kotlinchina.smallpockets.view.IMainView
-import rx.Subscription
 
 
 class MainActivity : AppCompatActivity(), IMainView {
@@ -37,8 +35,6 @@ class MainActivity : AppCompatActivity(), IMainView {
     val datas: MutableList<Link>? = null
 
     var adapter: ShowSiteListAdapter? = null
-
-    var getTitleWidhUrlSubscription: Subscription? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -76,7 +72,7 @@ class MainActivity : AppCompatActivity(), IMainView {
         dialog.setTitle(R.string.save_link_ornot)
         dialog.setMessage(link)
         dialog.setPositiveButton(R.string.Ok, { dialogInterface, i ->
-            getTitleWidhUrlSubscription =  mainPresenter?.getTitleWithURL(link)
+             mainPresenter?.getTitleWithURL(link)
         })
         dialog.setNegativeButton(R.string.Cancel, { dialogInterface, i ->
             Log.d(CLIPBOARD_TAG, "Cancel")
@@ -154,6 +150,5 @@ class MainActivity : AppCompatActivity(), IMainView {
 
     override fun onDestroy() {
         super.onDestroy()
-        RxManagerUtils.unSubscribe(getTitleWidhUrlSubscription)
     }
 }

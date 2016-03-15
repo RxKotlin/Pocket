@@ -5,7 +5,6 @@ import com.kotlinchina.smallpockets.model.impl.CoreLink
 import com.kotlinchina.smallpockets.presenter.IMainPresenter
 import com.kotlinchina.smallpockets.service.*
 import com.kotlinchina.smallpockets.view.IMainView
-import rx.Subscription
 import java.net.MalformedURLException
 import java.net.URL
 
@@ -29,8 +28,8 @@ class MainPresenter(mainView: IMainView, context: Context, httpService: HttpServ
         this.iSaveUrlInfo = iSaveUrlInfo
     }
 
-    override fun getTitleWithURL(url: String): Subscription {
-         return httpService.fetchDataWithUrl(url)
+    override fun getTitleWithURL(url: String) {
+          httpService.fetchDataWithUrl(url)
                 .map { t ->
                     iparseDom.getTitle(t)
                 }

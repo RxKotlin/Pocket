@@ -21,6 +21,7 @@ class VolleyHttpService constructor(applicationContext: Context): HttpService {
             val stringRequest = StringRequest(url, { response ->
                 response.let {
                     subscriber.onNext(it)
+                    subscriber.onCompleted()
                 }
             }, { error ->
                 error.let {
