@@ -7,5 +7,7 @@ android:
     - build-tools-23.0.1
     - android-23
     - sys-img-x86-android-23
+    - extra-google-m2repository
+    - extra-android-m2repository
 
 script: ./gradlew test
