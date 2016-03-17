@@ -11,6 +11,8 @@ android {
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
+        // HockeyApp
+        manifestPlaceholders = [HOCKEYAPP_APP_ID: 'afc9159ea81e4aaaaa37e4cdc4b62b2f']
     }
     buildTypes {
         release {
@@ -45,6 +47,8 @@ dependencies {
     compile 'com.joanzapata.android:base-adapter-helper:1.1.11'
     // Evernote
     compile 'com.evernote:android-sdk:2.0.0-RC3'
+    // HockeyApp
+    compile 'net.hockeyapp.android:HockeySDK:3.7.1'
 }
 buildscript {
     ext.kotlin_version = '1.0.0'

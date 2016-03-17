@@ -21,6 +21,8 @@
         <!-- Evernote -->
         <activity android:name="com.evernote.client.android.EvernoteOAuthActivity" />
         <activity android:name="com.evernote.client.android.login.EvernoteLoginActivity"/>
+        <!-- HockeyApp -->
+        <meta-data android:name="net.hockeyapp.android.appIdentifier" android:value="afc9159ea81e4aaaaa37e4cdc4b62b2f" />
     </application>
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
