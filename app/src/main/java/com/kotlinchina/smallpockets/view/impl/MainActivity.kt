@@ -18,6 +18,7 @@ import com.kotlinchina.smallpockets.presenter.IMainPresenter
 import com.kotlinchina.smallpockets.presenter.impl.MainPresenter
 import com.kotlinchina.smallpockets.service.impl.*
 import com.kotlinchina.smallpockets.view.IMainView
+import net.hockeyapp.android.CrashManager
 
 
 class MainActivity : AppCompatActivity(), IMainView {
@@ -52,6 +53,11 @@ class MainActivity : AppCompatActivity(), IMainView {
 
         initView()
         setOnclickListener()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        CrashManager.register(this)
     }
 
     private fun setOnclickListener() {
