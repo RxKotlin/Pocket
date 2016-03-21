@@ -12,6 +12,20 @@ import rx.Observable
 import rx.lang.kotlin.observable
 
 class EvernoteStoreService(application: Context): StoreService {
+    override fun storeWeekly(links: List<Link>): Observable<String> {
+        return observable { observer ->
+            val result = links.filter {
+                it.title != null && it.url != null && it.createDate != null
+            }.sortedBy { it.createDate }.map {
+                "<a href='${it.url}'>${it.title}</a>"
+            }.reduce { link1, link2 ->
+                "${link1}<br/>${link2}<br/>"
+            }
+            observer.onNext(result)
+            observer.onCompleted()
+        }
+    }
+
     private val application: Context
     init {
         this.application = application
@@ -21,7 +35,8 @@ class EvernoteStoreService(application: Context): StoreService {
             val everNoteSession = (application as? PocketApplication)?.everNoteSession
             val note = Note()
             note.title = title
-            note.content = EvernoteUtil.NOTE_PREFIX + content + EvernoteUtil.NOTE_SUFFIX
+            note.content = EvernoteUtil.NOTE_PREFIX + "<h1>" + content + "</h1>" + EvernoteUtil.NOTE_SUFFIX
+
             everNoteSession?.evernoteClientFactory?.noteStoreClient?.createNoteAsync(note, object: EvernoteCallback<Note> {
                 override fun onException(error: Exception?) {
                     it.onError(error)

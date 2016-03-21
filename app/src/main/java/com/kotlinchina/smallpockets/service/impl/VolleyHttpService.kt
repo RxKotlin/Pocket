@@ -25,7 +25,7 @@ class VolleyHttpService constructor(applicationContext: Context): HttpService {
                 }
             }, { error ->
                 error.let {
-                    subscriber.onError(Throwable(error.toString()))
+                    subscriber.onError(Exception(error.toString()))
                 }
             })
             queue.add(stringRequest)

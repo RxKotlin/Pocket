@@ -48,12 +48,14 @@ class MainPresenter(mainView: IMainView, context: Context, httpService: HttpServ
         this.mainView.setSiteListData(iSaveUrlInfo.loadData())
     }
 
-    override fun saveLinkToCloud(title: String, conent: String) {
-        storeService.store(title, conent).subscribe({
-            this.mainView.showSaveCloudResult(it.title!!)
-        }, {
-            this.mainView.showSaveCloudResult(it.message!!)
-        })
+    override fun saveLinkToCloud() {
+        storeService.storeWeekly(iSaveUrlInfo.loadData()).subscribe {
+            storeService.store("Weekly", it).subscribe({
+                this.mainView.showSaveCloudResult(it.title!!)
+            }, {
+                this.mainView.showSaveCloudResult(it.message!!)
+            })
+        }
     }
 
     override fun checkClipboard() {
