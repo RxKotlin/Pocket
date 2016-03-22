@@ -21,7 +21,7 @@ class MainPresenterTest {
         mockClipboardService = mock(ClipboardService::class.java)
         presenter = MainPresenter(mockMainActivity!!, mock(Context::class.java),
                 mock(HttpService::class.java), mock(StoreService::class.java),
-                mockClipboardService!!, mock(IParseDom::class.java), mock(ISaveUrlInfo::class.java))
+                mockClipboardService!!, mock(IParseDom::class.java), mock(IDataBaseStore::class.java))
     }
 
 

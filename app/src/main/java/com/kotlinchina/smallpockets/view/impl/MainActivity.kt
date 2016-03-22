@@ -49,7 +49,7 @@ class MainActivity : AppCompatActivity(), IMainView {
                 storeService = EvernoteStoreService(application),
                 clipboardService = clipboardService,
                 iparseDom = JxPathParseDom(),
-                iSaveUrlInfo = RealmOperatorUrlInfo())
+                dataBaseStore = RealmStore())
 
         initView()
         setOnclickListener()
@@ -138,7 +138,7 @@ class MainActivity : AppCompatActivity(), IMainView {
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        mainPresenter?.saveLinkToCloud()
+        mainPresenter?.sycLinksOfCurrentWeekToCloud()
         return true
     }
 

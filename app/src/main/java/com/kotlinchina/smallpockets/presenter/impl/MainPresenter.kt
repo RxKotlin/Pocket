@@ -7,8 +7,9 @@ import com.kotlinchina.smallpockets.service.*
 import com.kotlinchina.smallpockets.view.IMainView
 import java.net.MalformedURLException
 import java.net.URL
+import java.util.*
 
-class MainPresenter(mainView: IMainView, context: Context, httpService: HttpService, storeService: StoreService, clipboardService: ClipboardService,iparseDom: IParseDom,iSaveUrlInfo: ISaveUrlInfo): IMainPresenter {
+class MainPresenter(mainView: IMainView, context: Context, httpService: HttpService, storeService: StoreService, clipboardService: ClipboardService,iparseDom: IParseDom, dataBaseStore: IDataBaseStore): IMainPresenter {
 
     var mainView: IMainView
     val context: Context
@@ -16,7 +17,7 @@ class MainPresenter(mainView: IMainView, context: Context, httpService: HttpServ
     val storeService: StoreService
     val clipboardService: ClipboardService
     val iparseDom: IParseDom
-    val iSaveUrlInfo: ISaveUrlInfo
+    val dataBaseStore: IDataBaseStore
 
     init {
         this.mainView = mainView
@@ -25,7 +26,7 @@ class MainPresenter(mainView: IMainView, context: Context, httpService: HttpServ
         this.storeService = storeService
         this.clipboardService = clipboardService
         this.iparseDom = iparseDom
-        this.iSaveUrlInfo = iSaveUrlInfo
+        this.dataBaseStore = dataBaseStore
     }
 
     override fun getTitleWithURL(url: String) {
@@ -39,17 +40,24 @@ class MainPresenter(mainView: IMainView, context: Context, httpService: HttpServ
     }
 
     override fun saveToDB(title: String, url: String, tags: List<String>) {
-        iSaveUrlInfo.saveUrlInfoWithLink(CoreLink(title, url, tags))
-        this.mainView.setSiteListData(iSaveUrlInfo.loadData())
+        dataBaseStore.saveUrlInfoWithLink(CoreLink(title, url, tags))
+        this.mainView.setSiteListData(dataBaseStore.loadData())
     }
 
 
     override fun refreshList() {
-        this.mainView.setSiteListData(iSaveUrlInfo.loadData())
+        this.mainView.setSiteListData(dataBaseStore.loadData())
     }
 
-    override fun saveLinkToCloud() {
-        storeService.storeWeekly(iSaveUrlInfo.loadData()).subscribe {
+    override fun sycLinksOfCurrentWeekToCloud() {
+        fun firstDateOfCurrentWeek(): Date {
+            val calendar = Calendar.getInstance()
+            calendar.time = Date()
+            calendar.add(Calendar.DAY_OF_YEAR, -calendar.firstDayOfWeek);
+            return calendar.time
+        }
+
+        storeService.storeWeekly(dataBaseStore.loadDataByDate(firstDateOfCurrentWeek(), Date())).subscribe {
             storeService.store("Weekly", it).subscribe({
                 this.mainView.showSaveCloudResult(it.title!!)
             }, {
