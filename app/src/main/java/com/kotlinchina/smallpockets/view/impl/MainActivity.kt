@@ -138,7 +138,7 @@ class MainActivity : AppCompatActivity(), IMainView {
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        mainPresenter?.saveLinkToCloud("Fuck title", "Fuck content")
+        mainPresenter?.saveLinkToCloud()
         return true
     }
 
