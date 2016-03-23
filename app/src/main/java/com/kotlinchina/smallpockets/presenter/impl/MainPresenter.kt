@@ -7,6 +7,7 @@ import com.kotlinchina.smallpockets.service.*
 import com.kotlinchina.smallpockets.view.IMainView
 import java.net.MalformedURLException
 import java.net.URL
+import java.text.SimpleDateFormat
 import java.util.*
 
 class MainPresenter(mainView: IMainView, context: Context, httpService: HttpService, storeService: StoreService, clipboardService: ClipboardService,iparseDom: IParseDom, dataBaseStore: IDataBaseStore): IMainPresenter {
@@ -57,8 +58,18 @@ class MainPresenter(mainView: IMainView, context: Context, httpService: HttpServ
             return calendar.time
         }
 
-        storeService.storeWeekly(dataBaseStore.loadDataByDate(firstDateOfCurrentWeek(), Date())).subscribe {
-            storeService.store("Weekly", it).subscribe({
+        fun titleForm(currentDate: Date, firstDate: Date): String  {
+            val simpleDateFormat = SimpleDateFormat("MM-DD")
+            return "${simpleDateFormat.format(firstDate)} ~ ${simpleDateFormat.format(currentDate)} Weekly"
+        }
+
+        val firstDate = firstDateOfCurrentWeek()
+        val currentDate = Date()
+        val title = titleForm(currentDate, firstDate)
+
+        storeService.storeWeekly(dataBaseStore.loadDataByDate(firstDate, currentDate)).subscribe {
+
+            storeService.store(title, it).subscribe({
                 this.mainView.showSaveCloudResult(it.title!!)
             }, {
                 this.mainView.showSaveCloudResult(it.message!!)
