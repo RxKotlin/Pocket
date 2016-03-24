@@ -50,10 +50,10 @@ class MainPresenter(mainView: IMainView, context: Context, httpService: HttpServ
         this.mainView.setSiteListData(dataBaseStore.loadData())
     }
 
-    override fun sycLinksOfCurrentWeekToCloud() {
-        fun firstDateOfCurrentWeek(): Date {
+    override fun sycLinksOfCurrentWeekToCloud(today: Date) {
+        fun firstDateOfCurrentWeek(today: Date): Date {
             val calendar = Calendar.getInstance()
-            calendar.time = Date()
+            calendar.time = today
             calendar.add(Calendar.DAY_OF_YEAR, -calendar.firstDayOfWeek);
             return calendar.time
         }
@@ -63,11 +63,10 @@ class MainPresenter(mainView: IMainView, context: Context, httpService: HttpServ
             return "${simpleDateFormat.format(firstDate)} ~ ${simpleDateFormat.format(currentDate)} Weekly"
         }
 
-        val firstDate = firstDateOfCurrentWeek()
-        val currentDate = Date()
-        val title = titleForm(currentDate, firstDate)
+        val firstDate = firstDateOfCurrentWeek(today)
+        val title = titleForm(today, firstDate)
 
-        storeService.storeWeekly(dataBaseStore.loadDataByDate(firstDate, currentDate)).subscribe {
+        storeService.storeWeekly(dataBaseStore.loadDataByDate(firstDate, today)).subscribe {
 
             storeService.store(title, it).subscribe({
                 this.mainView.showSaveCloudResult(it.title!!)
