@@ -14,6 +14,10 @@ import rx.lang.kotlin.observable
 class EvernoteStoreService(application: Context): StoreService {
     override fun storeWeekly(links: List<Link>): Observable<String> {
         return observable { observer ->
+            if (links.count() <= 0) {
+                observer.onError(Exception("empty links array"))
+                return@observable
+            }
             val result = links.filter {
                 it.title != null && it.url != null && it.createDate != null
             }.sortedBy { it.createDate }.map {
