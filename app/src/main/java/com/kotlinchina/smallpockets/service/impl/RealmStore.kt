@@ -36,7 +36,7 @@ class RealmStore : IDataBaseStore {
         }
     }
 
-    override fun loadDataByDate(fromDate: Date, toDate: Date): List<Link> {
+    override fun queryDataByDate(fromDate: Date, toDate: Date): List<Link> {
         val realm = Realm.getDefaultInstance()
         val results = realm.where(RealmLink::class.java).between("createDate", fromDate, toDate).findAll()
         return results.map {

@@ -5,36 +5,16 @@ import com.evernote.client.android.EvernoteUtil
 import com.evernote.client.android.asyncclient.EvernoteCallback
 import com.evernote.edam.type.Note
 import com.kotlinchina.smallpockets.application.PocketApplication
-import com.kotlinchina.smallpockets.model.Link
-import com.kotlinchina.smallpockets.model.impl.CoreLink
 import com.kotlinchina.smallpockets.service.StoreService
 import rx.Observable
 import rx.lang.kotlin.observable
 
 class EvernoteStoreService(application: Context): StoreService {
-    override fun storeWeekly(links: List<Link>): Observable<String> {
-        return observable { observer ->
-            if (links.count() <= 0) {
-                observer.onError(Exception("empty links array"))
-                return@observable
-            }
-            val result = links.filter {
-                it.title != null && it.url != null && it.createDate != null
-            }.sortedBy { it.createDate }.map {
-                "<a href='${it.url}'>${it.title}</a>"
-            }.reduce { link1, link2 ->
-                "${link1}<br/>${link2}<br/>"
-            }
-            observer.onNext(result)
-            observer.onCompleted()
-        }
-    }
-
     private val application: Context
     init {
         this.application = application
     }
-    override fun store(title: String, content: String): Observable<Link> {
+    override fun store(title: String, content: String): Observable<String> {
         return observable {
             val everNoteSession = (application as? PocketApplication)?.everNoteSession
             val note = Note()
@@ -47,14 +27,8 @@ class EvernoteStoreService(application: Context): StoreService {
                 }
 
                 override fun onSuccess(note: Note?) {
-                    val title = note?.title
-                    if (title != null) {
-                        val link = CoreLink(title , "", null)
-                        it.onNext(link)
-                        it.onCompleted()
-                    }
-
-                    it.onError(Exception("the evernote title do not exit"))
+                    it.onNext("Save success")
+                    it.onCompleted()
                 }
             })
         }

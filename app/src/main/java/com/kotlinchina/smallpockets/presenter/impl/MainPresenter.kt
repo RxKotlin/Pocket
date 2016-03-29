@@ -1,7 +1,9 @@
 package com.kotlinchina.smallpockets.presenter.impl
 
 import android.content.Context
+import android.util.Log
 import com.kotlinchina.smallpockets.model.impl.CoreLink
+import com.kotlinchina.smallpockets.model.impl.html
 import com.kotlinchina.smallpockets.presenter.IMainPresenter
 import com.kotlinchina.smallpockets.service.*
 import com.kotlinchina.smallpockets.view.IMainView
@@ -65,15 +67,17 @@ class MainPresenter(mainView: IMainView, context: Context, httpService: HttpServ
 
         val firstDate = firstDateOfCurrentWeek(today)
         val title = titleForm(today, firstDate)
-
-        storeService.storeWeekly(dataBaseStore.loadDataByDate(firstDate, today)).subscribe {
-
-            storeService.store(title, it).subscribe({
-                this.mainView.showSaveCloudResult(it.title!!)
-            }, {
-                this.mainView.showSaveCloudResult(it.message!!)
-            })
+        val html = dataBaseStore.queryDataByDate(firstDate, today).html()
+        if (html == null) {
+//            Log.e("${this.javaClass}", "format error")
+            return
         }
+
+        storeService.store(title, html).subscribe ({
+            this.mainView.showSaveCloudResult("Cool")
+        }, {
+            this.mainView.showSaveCloudResult(it.message!!)
+        })
     }
 
     override fun checkClipboard() {
