@@ -2,24 +2,24 @@ package com.kotlinchina.smallpockets.service.impl
 
 import android.content.Context
 import com.kotlinchina.smallpockets.model.Link
+import com.kotlinchina.smallpockets.model.impl.CoreLink
+import com.kotlinchina.smallpockets.model.impl.html
 import org.junit.Test
 import org.mockito.BDDMockito.*
 
 import org.junit.Assert.*
 
-class EvernoteStoreServiceTest {
+class LinkListMapperTest {
 
     @Test
-    fun testStoreWeekly() {
-        val context = mock(Context::class.java)
-        val service = EvernoteStoreService(context)
+    fun testShouldNullWhenLinksNotHaveLink() {
+        val links = listOf<Link>()
+        assertEquals(null, links.html())
+    }
 
-        val lists = listOf<Link>()
-        var msg: String? = ""
-        service.storeWeekly(lists).subscribe({}, {
-            msg = it.message
-        })
-
-        assertEquals("empty links array", msg)
+    @Test
+    fun testShouldReturnHTMLWhenLinksNotHaveLink() {
+        val links = listOf<Link>(CoreLink("1", "2", null), CoreLink("a", "b", null))
+        assertEquals("<a href='2'>1</a><br/><a href='b'>a</a><br/>", links.html())
     }
 }
