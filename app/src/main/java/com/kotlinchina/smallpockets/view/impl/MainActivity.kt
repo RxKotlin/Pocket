@@ -54,6 +54,24 @@ class MainActivity : AppCompatActivity(), IMainView {
 
         initView()
         setOnclickListener()
+        val htmlTemplateRender = HTMLTemplateRender("www/template.html", this)
+        htmlTemplateRender.load()
+        val result = htmlTemplateRender.render(
+                mapOf(
+                    "title" to "Fuck",
+                    "links" to listOf(
+                            mapOf(
+                                    "title" to "1",
+                                    "tags" to listOf(
+                                            mapOf("name" to "1"),
+                                            mapOf("name" to "2"),
+                                            mapOf("name" to "3")
+                                    )
+                            )
+                    )
+                )
+        )
+        Log.e("-------->", result)
     }
 
     override fun onResume() {
