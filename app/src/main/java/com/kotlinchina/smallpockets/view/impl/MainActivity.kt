@@ -55,7 +55,6 @@ class MainActivity : AppCompatActivity(), IMainView {
         initView()
         setOnclickListener()
         val htmlTemplateRender = HTMLTemplateRender("www/template.html", this)
-        htmlTemplateRender.load()
         val result = htmlTemplateRender.render(
                 mapOf(
                     "header" to "Apr 1~3th",

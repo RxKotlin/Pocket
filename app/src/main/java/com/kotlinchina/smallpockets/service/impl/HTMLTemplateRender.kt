@@ -18,18 +18,23 @@ class HTMLTemplateRender: IHTMLTemplateRender {
         this.valueRegex = Regex("\\$\\{(.+?)\\}")
     }
 
-    fun load() {
+    override fun render(data: Map<String, Any>): String? {
+        try {
+            load()
+        } catch (e: Exception) {
+            return null
+        }
+
+        return render(htmlTemplate!!, data)
+    }
+
+    private fun load() {
         try {
             val inputStream = context.assets.open(path)
             htmlTemplate = IOUtils.toString(inputStream, "UTF-8")
         } catch(e: Exception) {
             Log.e("${this.javaClass}", "The template can not be load")
         }
-    }
-
-    override fun render(data: Map<String, Any>): String? {
-        val html = render(htmlTemplate!!, data)
-        return html
     }
 
     private fun render(htmlTemplate: String, data: Map<String, Any>): String {
