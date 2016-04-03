@@ -58,14 +58,40 @@ class MainActivity : AppCompatActivity(), IMainView {
         htmlTemplateRender.load()
         val result = htmlTemplateRender.render(
                 mapOf(
-                    "title" to "Fuck",
+                    "header" to "Apr 1~3th",
                     "links" to listOf(
                             mapOf(
-                                    "title" to "1",
+                                    "title" to "30天入门 Android 开发， Google 与你一起圆梦",
+                                    "link" to "#",
                                     "tags" to listOf(
-                                            mapOf("name" to "1"),
-                                            mapOf("name" to "2"),
-                                            mapOf("name" to "3")
+                                            mapOf("name" to "OS"),
+                                            mapOf("name" to "Android"),
+                                            mapOf("name" to "Google")
+                                    )
+                            ),
+                            mapOf(
+                                    "title" to "湖北现雷人标语",
+                                    "link" to "#",
+                                    "tags" to listOf(
+                                            mapOf("name" to "湖北"),
+                                            mapOf("name" to "广告")
+                                    )
+                            ),
+                            mapOf(
+                                    "title" to "游船被龙卷风吹翻",
+                                    "link" to "#",
+                                    "tags" to listOf(
+                                            mapOf("name" to "天气"),
+                                            mapOf("name" to "旅游"),
+                                            mapOf("name" to "事故")
+                                    )
+                            ),
+                            mapOf(
+                                    "title" to "爱情公寓5疑开拍",
+                                    "link" to "#",
+                                    "tags" to listOf(
+                                            mapOf("name" to "娱乐"),
+                                            mapOf("name" to "影视")
                                     )
                             )
                     )

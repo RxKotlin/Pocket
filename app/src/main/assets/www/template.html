@@ -1,26 +1,74 @@
 <html>
-  <head>
-    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-    <title></title>
-  </head>
-  <body>
-    ${title}
-    @foreach ($links)
-    <div class="link">
-      <div class="title">
-        ${title}
-      </div>
-      <div class="tags">
-        @foreach ($tags)
-        <div class="tag">
-          ${name}
-        </div>
-        @endforeach
-      </div>
-      <div class="date">
-        ${date}
-      </div>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <title></title>
+  <style media="screen">
+    * {
+      padding: 0px;
+      margin: 0px;
+      text-decoration: none;
+    }
+    .content {
+      margin: 0 auto;
+      width: 800px;
+    }
+
+    .content .header {
+      font-family: "Helvetica Neue", "Helvetica", "Lucida Grande", "Arial", "Hiragino Sans GB", "Microsoft Yahei", "WenQuanYi Micro Hei", "sans-serif";
+      font-size: 3.6rem;
+    }
+
+    .content .link {
+      margin-top: 10px;
+    }
+
+    .content .link .title {
+      font-family: "Helvetica Neue", "Helvetica", "Lucida Grande", "Arial", "Hiragino Sans GB", "Microsoft Yahei", "WenQuanYi Micro Hei", "sans-serif";
+      font-size: 1.8rem;
+    }
+
+    .content .link .tags .tag {
+      font-family: "Helvetica Neue", "Helvetica", "Lucida Grande", "Arial", "Hiragino Sans GB", "Microsoft Yahei", "WenQuanYi Micro Hei", "sans-serif";
+      font-size: 1.0rem;
+      float: left;
+      margin-right: 10px;
+    }
+
+    .content .link .date {
+      font-family: "Helvetica Neue", "Helvetica", "Lucida Grande", "Arial", "Hiragino Sans GB", "Microsoft Yahei", "WenQuanYi Micro Hei", "sans-serif";
+      font-size: 1.0rem;
+      float: none;
+    }
+  </style>
+</head>
+<body>
+<div class="content">
+  <div class="header">
+    ${header}
+  </div>
+  @foreach ($links)
+  <div class="link">
+    <div class="title">
+      <a href="${link}">${title}</a>
     </div>
-    @endforeach
-  </body>
+    <div class="desc">
+      替换此处，描述故事
+    </div>
+    <div class="tags">
+      <div class="tag">
+        标签:
+      </div>
+      @foreach ($tags)
+      <div class="tag">
+        ${name}
+      </div>
+      @endforeach
+    </div>
+    <div class="date">
+      日期: ${date}
+    </div>
+  </div>
+  @endforeach
+</div>
+</body>
 </html>
