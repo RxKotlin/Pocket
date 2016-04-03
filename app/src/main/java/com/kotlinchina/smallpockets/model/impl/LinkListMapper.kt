@@ -1,16 +1,24 @@
 package com.kotlinchina.smallpockets.model.impl
 
+import android.content.Context
 import com.kotlinchina.smallpockets.model.Link
+import com.kotlinchina.smallpockets.service.impl.HTMLTemplateRender
+import java.text.SimpleDateFormat
 
-fun List<Link>.html(): String? {
-    if (this.count() <= 0) {
-        return null
-    }
-    return this.filter {
-        it.title != null && it.url != null && it.createDate != null
-    }.sortedBy { it.createDate }.map {
-        "<a href='${it.url}'>${it.title}</a>"
-    }.reduce { result, link ->
-        "$result<br/>$link<br/>"
-    }
+fun List<Link>.formatedHtml(context: Context): String? {
+    val simpleDateFormat = SimpleDateFormat("MM-DD")
+    val data = mapOf(
+            "links" to this.map { link ->
+                mapOf(
+                        "title" to link.title,
+                        "link" to link.url,
+                        "tags" to link.tags?.map { tag ->
+                            mapOf("name" to tag.name)
+                        },
+                        "date" to simpleDateFormat.format(link.createDate)
+                )
+            }
+    )
+    val htmlTemplateRender = HTMLTemplateRender("www/template.html", context)
+    return htmlTemplateRender.render(data)
 }

@@ -2,10 +2,13 @@ package com.kotlinchina.smallpockets.presenter.impl
 
 import android.content.Context
 import android.util.Log
+import com.kotlinchina.smallpockets.model.Link
 import com.kotlinchina.smallpockets.model.impl.CoreLink
+import com.kotlinchina.smallpockets.model.impl.formatedHtml
 import com.kotlinchina.smallpockets.model.impl.html
 import com.kotlinchina.smallpockets.presenter.IMainPresenter
 import com.kotlinchina.smallpockets.service.*
+import com.kotlinchina.smallpockets.service.impl.HTMLTemplateRender
 import com.kotlinchina.smallpockets.view.IMainView
 import java.net.MalformedURLException
 import java.net.URL
@@ -67,9 +70,9 @@ class MainPresenter(mainView: IMainView, context: Context, httpService: HttpServ
 
         val firstDate = firstDateOfCurrentWeek(today)
         val title = titleForm(today, firstDate)
-        val html = dataBaseStore.queryDataByDate(firstDate, today).html()
+        val html = (dataBaseStore.queryDataByDate(firstDate, today)).formatedHtml(context)
         if (html == null) {
-//            Log.e("${this.javaClass}", "format error")
+            Log.e("${this.javaClass}", "format error")
             return
         }
 
