@@ -15,7 +15,7 @@ class HTMLTemplateRender: IHTMLTemplateRender {
         this.path = path
         this.context = context
         this.beforEachRegex = Regex("\\@foreach \\(\\$([\\w]+)\\)([\\w\\W]+)\\@endforeach")
-        this.valueRegex = Regex("\\$\\{(.+)\\}")
+        this.valueRegex = Regex("\\$\\{(.+?)\\}")
     }
 
     fun load() {
