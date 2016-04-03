@@ -19,7 +19,7 @@ class EvernoteStoreService(application: Context): StoreService {
             val everNoteSession = (application as? PocketApplication)?.everNoteSession
             val note = Note()
             note.title = title
-            note.content = EvernoteUtil.NOTE_PREFIX + "<h1>" + content + "</h1>" + EvernoteUtil.NOTE_SUFFIX
+            note.content = EvernoteUtil.NOTE_PREFIX + content + EvernoteUtil.NOTE_SUFFIX
 
             everNoteSession?.evernoteClientFactory?.noteStoreClient?.createNoteAsync(note, object: EvernoteCallback<Note> {
                 override fun onException(error: Exception?) {
