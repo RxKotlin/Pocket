@@ -6,6 +6,7 @@ import com.kotlinchina.smallpockets.model.impl.CoreLink
 import com.kotlinchina.smallpockets.model.impl.formatedHtml
 import com.kotlinchina.smallpockets.presenter.IMainPresenter
 import com.kotlinchina.smallpockets.service.*
+import com.kotlinchina.smallpockets.service.impl.CalendarService
 import com.kotlinchina.smallpockets.view.IMainView
 import java.net.MalformedURLException
 import java.net.URL
@@ -53,21 +54,13 @@ class MainPresenter(mainView: IMainView, context: Context, httpService: HttpServ
     }
 
     override fun sycLinksOfCurrentWeekToCloud(today: Date) {
-        fun firstDateOfCurrentWeek(today: Date): Date {
-            val calendar = Calendar.getInstance()
-            calendar.time = today
-            calendar.add(Calendar.DAY_OF_YEAR, -calendar.firstDayOfWeek);
-            return calendar.time
+        fun titleForm(beginDate: Date, endDate: Date): String  {
+            val simpleDateFormat = SimpleDateFormat("MM-dd")
+            return "${simpleDateFormat.format(beginDate)} ~ ${simpleDateFormat.format(endDate)} Weekly"
         }
-
-        fun titleForm(currentDate: Date, firstDate: Date): String  {
-            val simpleDateFormat = SimpleDateFormat("MM-DD")
-            return "${simpleDateFormat.format(firstDate)} ~ ${simpleDateFormat.format(currentDate)} Weekly"
-        }
-
-        val firstDate = firstDateOfCurrentWeek(today)
-        val title = titleForm(today, firstDate)
-        val html = (dataBaseStore.queryDataByDate(firstDate, today)).formatedHtml(context)
+        val datePair = CalendarService().getMondayAndSundayDateOfThisWeek(today)
+        val title = titleForm(datePair.first, datePair.second)
+        val html = (dataBaseStore.queryDataByDate(datePair.first, datePair.second)).formatedHtml(context)
         if (html == null) {
             Log.e("${this.javaClass}", "format error")
             return
