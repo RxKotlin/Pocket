@@ -5,13 +5,13 @@ import com.kotlinchina.smallpockets.model.Link
 import com.kotlinchina.smallpockets.model.impl.CoreLink
 import com.kotlinchina.smallpockets.presenter.impl.MainPresenter
 import com.kotlinchina.smallpockets.service.*
+import com.kotlinchina.smallpockets.transform.ILinksToHTML
 import com.kotlinchina.smallpockets.view.IMainView
 import org.junit.Before
 import org.junit.Test
 import org.mockito.BDDMockito.*
 import rx.lang.kotlin.observable
 import java.text.SimpleDateFormat
-import java.util.*
 
 class MainPresenterTest {
 
@@ -20,6 +20,7 @@ class MainPresenterTest {
     var mockMainActivity: IMainView? = null
     var mockDatabaseStore: IDataBaseStore? = null
     var mockStoreService: StoreService? = null
+    var mockLinksToHTML: ILinksToHTML? = null
 
     @Before
     fun setUp() {
@@ -27,9 +28,11 @@ class MainPresenterTest {
         mockClipboardService = mock(ClipboardService::class.java)
         mockDatabaseStore = mock(IDataBaseStore::class.java)
         mockStoreService = mock(StoreService::class.java)
+        mockLinksToHTML = mock(ILinksToHTML::class.java)
         presenter = MainPresenter(mockMainActivity!!, mock(Context::class.java),
                 mock(HttpService::class.java), mockStoreService!!,
-                mockClipboardService!!, mock(IParseDom::class.java), mockDatabaseStore!!)
+                mockClipboardService!!, mock(IParseDom::class.java), mockDatabaseStore!!,
+                mockLinksToHTML!!)
     }
 
 
@@ -61,6 +64,7 @@ class MainPresenterTest {
         }
         given(mockDatabaseStore!!.queryDataByDate(link1.createDate!!, today)).willReturn(lists)
         given(mockStoreService!!.store(anyString(), anyString())).willReturn(success)
+        given(mockLinksToHTML!!.html(anyListOf(Link::class.java))).willReturn("")
         presenter!!.sycLinksOfCurrentWeekToCloud(today)
         then(mockMainActivity!!).should(times(1)).showSaveCloudResult("Cool")
     }

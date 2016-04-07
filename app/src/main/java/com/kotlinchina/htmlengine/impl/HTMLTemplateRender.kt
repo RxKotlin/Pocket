@@ -1,43 +1,16 @@
-package com.kotlinchina.smallpockets.service.impl
+package com.kotlinchina.htmlengine.impl
 
-import android.content.Context
-import android.util.Log
-import com.kotlinchina.smallpockets.service.IHTMLTemplateRender
-import org.apache.commons.io.IOUtils
+import com.kotlinchina.htmlengine.protocol.IHTMLTemplateRender
 
 class HTMLTemplateRender: IHTMLTemplateRender {
-    private val path: String
-    private val context: Context
     private val beforEachRegex: Regex
     private val valueRegex: Regex
-    private var htmlTemplate: String? = null
-    constructor(path: String, context: Context) {
-        this.path = path
-        this.context = context
+    constructor() {
         this.beforEachRegex = Regex("\\@foreach \\(\\$([\\w]+)\\)([\\w\\W]+)\\@endforeach")
         this.valueRegex = Regex("\\$\\{(.+?)\\}")
     }
 
-    override fun render(data: Map<String, Any>): String? {
-        try {
-            load()
-        } catch (e: Exception) {
-            return null
-        }
-
-        return render(htmlTemplate!!, data)
-    }
-
-    private fun load() {
-        try {
-            val inputStream = context.assets.open(path)
-            htmlTemplate = IOUtils.toString(inputStream, "UTF-8")
-        } catch(e: Exception) {
-            Log.e("${this.javaClass}", "The template can not be load")
-        }
-    }
-
-    private fun render(htmlTemplate: String, data: Map<String, Any>): String {
+    override fun render(htmlTemplate: String, data: Map<String, Any>): String {
         val valueSymbols = valueRegex.findAll(htmlTemplate.toString())
         val subBeforEachSymbols = beforEachRegex.findAll(htmlTemplate.toString())
 

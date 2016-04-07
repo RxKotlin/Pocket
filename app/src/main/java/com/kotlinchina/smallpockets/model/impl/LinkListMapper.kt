@@ -1,13 +1,11 @@
 package com.kotlinchina.smallpockets.model.impl
 
-import android.content.Context
 import com.kotlinchina.smallpockets.model.Link
-import com.kotlinchina.smallpockets.service.impl.HTMLTemplateRender
 import java.text.SimpleDateFormat
 
-fun List<Link>.formatedHtml(context: Context): String? {
+fun List<Link>.toMap(): Map<String, Any> {
     val simpleDateFormat = SimpleDateFormat("MM-DD")
-    val data = mapOf(
+    return mapOf(
             "links" to this.map { link ->
                 mapOf(
                         "title" to link.title,
@@ -19,6 +17,4 @@ fun List<Link>.formatedHtml(context: Context): String? {
                 )
             }
     )
-    val htmlTemplateRender = HTMLTemplateRender("www/template.html", context)
-    return htmlTemplateRender.render(data)
 }

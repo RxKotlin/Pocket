@@ -3,17 +3,17 @@ package com.kotlinchina.smallpockets.presenter.impl
 import android.content.Context
 import android.util.Log
 import com.kotlinchina.smallpockets.model.impl.CoreLink
-import com.kotlinchina.smallpockets.model.impl.formatedHtml
 import com.kotlinchina.smallpockets.presenter.IMainPresenter
 import com.kotlinchina.smallpockets.service.*
 import com.kotlinchina.smallpockets.service.impl.CalendarService
+import com.kotlinchina.smallpockets.transform.ILinksToHTML
 import com.kotlinchina.smallpockets.view.IMainView
 import java.net.MalformedURLException
 import java.net.URL
 import java.text.SimpleDateFormat
 import java.util.*
 
-class MainPresenter(mainView: IMainView, context: Context, httpService: HttpService, storeService: StoreService, clipboardService: ClipboardService,iparseDom: IParseDom, dataBaseStore: IDataBaseStore): IMainPresenter {
+class MainPresenter(mainView: IMainView, context: Context, httpService: HttpService, storeService: StoreService, clipboardService: ClipboardService,iparseDom: IParseDom, dataBaseStore: IDataBaseStore, linksToHTML: ILinksToHTML): IMainPresenter {
 
     var mainView: IMainView
     val context: Context
@@ -22,6 +22,7 @@ class MainPresenter(mainView: IMainView, context: Context, httpService: HttpServ
     val clipboardService: ClipboardService
     val iparseDom: IParseDom
     val dataBaseStore: IDataBaseStore
+    val linksToHTML: ILinksToHTML
 
     init {
         this.mainView = mainView
@@ -31,6 +32,7 @@ class MainPresenter(mainView: IMainView, context: Context, httpService: HttpServ
         this.clipboardService = clipboardService
         this.iparseDom = iparseDom
         this.dataBaseStore = dataBaseStore
+        this.linksToHTML = linksToHTML
     }
 
     override fun getTitleWithURL(url: String) {
@@ -60,7 +62,8 @@ class MainPresenter(mainView: IMainView, context: Context, httpService: HttpServ
         }
         val datePair = CalendarService().getMondayAndSundayDateOfThisWeek(today)
         val title = titleForm(datePair.first, datePair.second)
-        val html = (dataBaseStore.queryDataByDate(datePair.first, datePair.second)).formatedHtml(context)
+        val links = dataBaseStore.queryDataByDate(datePair.first, datePair.second)
+        val html = linksToHTML.html(links)
         if (html == null) {
             Log.e("${this.javaClass}", "format error")
             return
