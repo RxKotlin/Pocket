@@ -4,6 +4,6 @@ import com.kotlinchina.smallpockets.service.ClipboardService
 
 class DebugCacheClipboardService: ClipboardService {
     override fun content(): String {
-        return "https://baidu.com"
+        return "http://pinyin.sogou.com"
     }
 }

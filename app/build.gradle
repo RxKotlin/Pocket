@@ -23,6 +23,18 @@ android {
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
     }
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES.txt'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/notice.txt'
+        exclude 'META-INF/license.txt'
+        exclude 'META-INF/dependencies.txt'
+        exclude 'META-INF/LGPL2.1'
+    }
 }
 
 dependencies {
@@ -49,6 +61,8 @@ dependencies {
     compile 'com.evernote:android-sdk:2.0.0-RC3'
     // HockeyApp
     compile 'net.hockeyapp.android:HockeySDK:3.7.1'
+    // Apache commons
+    compile 'commons-io:commons-io:2.4'
 }
 buildscript {
     ext.kotlin_version = '1.0.0'

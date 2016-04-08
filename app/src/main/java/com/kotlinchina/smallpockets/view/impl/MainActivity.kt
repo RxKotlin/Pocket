@@ -17,8 +17,10 @@ import com.kotlinchina.smallpockets.model.Link
 import com.kotlinchina.smallpockets.presenter.IMainPresenter
 import com.kotlinchina.smallpockets.presenter.impl.MainPresenter
 import com.kotlinchina.smallpockets.service.impl.*
+import com.kotlinchina.smallpockets.transform.impl.LinksToHTMLWithHTMLEngine
 import com.kotlinchina.smallpockets.view.IMainView
 import net.hockeyapp.android.CrashManager
+import java.util.*
 
 
 class MainActivity : AppCompatActivity(), IMainView {
@@ -49,7 +51,8 @@ class MainActivity : AppCompatActivity(), IMainView {
                 storeService = EvernoteStoreService(application),
                 clipboardService = clipboardService,
                 iparseDom = JxPathParseDom(),
-                iSaveUrlInfo = RealmOperatorUrlInfo())
+                dataBaseStore = RealmStore(),
+                linksToHTML = LinksToHTMLWithHTMLEngine(this))
 
         initView()
         setOnclickListener()
@@ -138,7 +141,7 @@ class MainActivity : AppCompatActivity(), IMainView {
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        mainPresenter?.saveLinkToCloud("Fuck title", "Fuck content")
+        mainPresenter?.sycLinksOfCurrentWeekToCloud(Date())
         return true
     }
 
