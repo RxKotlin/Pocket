@@ -11,3 +11,7 @@ android:
     - extra-android-m2repository
 
 script: ./gradlew test
+
+# Slack Notification
+notifications:
+  slack: kotlinchina:dQzkeJ1Fwf9yMsAnTB7zv2yF
