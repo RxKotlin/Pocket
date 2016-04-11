@@ -4,7 +4,7 @@ import com.kotlinchina.smallpockets.model.Link
 import java.text.SimpleDateFormat
 
 fun List<Link>.toMap(): Map<String, Any> {
-    val simpleDateFormat = SimpleDateFormat("MM-DD")
+    val simpleDateFormat = SimpleDateFormat("MM-dd")
     return mapOf(
             "links" to this.map { link ->
                 mapOf(
