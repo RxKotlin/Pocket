@@ -1,5 +1,24 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
+apply plugin: 'de.felixschulze.gradle.hockeyapp'
+
+def buildID() {
+    try {
+        Integer.parseInt("$System.env.TRAVIS_BUILD_NUMBER")
+    } catch (ignored) {
+        1
+    }
+}
+
+def buildNote() {
+    def formattedDate = new Date().format('MM/dd/yyyy')
+    def lastCommitID = 'git rev-parse HEAD'.execute().text.trim()
+    def lastCommitMsg = 'git log -1 --abbrev-commit'.execute().text.trim()
+    "**Date**:$formattedDate\n\n" +
+            "**Build ID**:${buildID()}\n\n" +
+            "**Last git commit version**:$lastCommitID\n\n" +
+            "**Last git commit message**:$lastCommitMsg"
+}
 
 android {
     compileSdkVersion 23
@@ -9,7 +28,7 @@ android {
         applicationId "com.kotlinchina.smallpockets"
         minSdkVersion 15
         targetSdkVersion 23
-        versionCode 1
+        versionCode buildID()
         versionName "1.0"
         // HockeyApp
         manifestPlaceholders = [HOCKEYAPP_APP_ID: 'afc9159ea81e4aaaaa37e4cdc4b62b2f']
@@ -64,6 +83,7 @@ dependencies {
     // Apache commons
     compile 'commons-io:commons-io:2.4'
 }
+
 buildscript {
     ext.kotlin_version = '1.0.0'
     // Realm
@@ -75,6 +95,16 @@ buildscript {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
+
+hockeyapp {
+    apiToken = "2586d0940aef4d6090e743ff141ee20d"
+    releaseType = 2 // alpha
+    notify = 0
+    status = 2
+    notesType = 1
+    notes = buildNote()
+}
+
 repositories {
     mavenCentral()
 }
