@@ -72,11 +72,10 @@ class MainActivity : AppCompatActivity(), IMainView {
     private fun setOnclickListener() {
         listview?.setOnItemClickListener { adapterView, view, i, l ->
             Toast.makeText(this@MainActivity,"show detail"+ ": position" +l, Toast.LENGTH_SHORT).show()
+            //在这里可以取得URl传递 过去即可
             supportFragmentManager.beginTransaction().replace(R.id.drawer_content, BaseWebViewFragment()).commit()
             mDrawerLayout?.openDrawer(drawer_content)//打开抽屉内容
         }
-
-
     }
 
     private fun initView() {

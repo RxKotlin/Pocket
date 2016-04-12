@@ -71,7 +71,6 @@ public class CusTomProgressWebView extends LinearLayout {
 		initWebview(url);
 	}
 
-
 	private void initWebview(String url) {
 
 		mWebView.addJavascriptInterface(this, "android");

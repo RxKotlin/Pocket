@@ -13,9 +13,7 @@ import com.kotlinchina.smallpockets.widget.CusTomProgressWebView
  */
 class BaseWebViewFragment : Fragment() {
 
-
     var customProgressWebView:CusTomProgressWebView? = null
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,6 +21,7 @@ class BaseWebViewFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        //test url
         customProgressWebView?.loadUrl("http://www.baidu.com")
     }
 
