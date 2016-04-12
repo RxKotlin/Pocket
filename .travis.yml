@@ -10,7 +10,14 @@ android:
     - extra-google-m2repository
     - extra-android-m2repository
 
-script: ./travisci.sh
+script: ./gradlew test
+
+deploy:
+  provider: script
+  script: ./gradlew uploadDebugToHockeyApp
+  on:
+    branch: master
+
 
 # Slack Notification
 notifications:
