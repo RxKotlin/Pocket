@@ -8,9 +8,9 @@ import io.realm.RealmConfiguration
 class PocketApplication : Application() {
 
     companion object {
-        val CONSUMER_KEY = "xxxxx";
-        val CONSUMER_SECRET = "xxxxx";
-        val EVERNOTE_SERVICE = EvernoteSession.EvernoteService.SANDBOX;
+        val CONSUMER_KEY = "itrufeng"
+        val CONSUMER_SECRET = "08278d04ea274374"
+        val EVERNOTE_SERVICE = EvernoteSession.EvernoteService.SANDBOX
     }
     var everNoteSession: EvernoteSession? = null
 
