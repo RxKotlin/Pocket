@@ -119,29 +119,7 @@ class MainActivity : AppCompatActivity(), IMainView {
         }
         dialog.show(fragmentManager, SAVE_TAGS)
     }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        fun saveData() {
-//            if (resultCode == RESULT_OK) {
-//                when (requestCode) {
-//                    SAVE_TAGS -> {
-//                        val title = data?.getStringExtra(SaveTagActivity.TITLE)
-//                        val url = data?.getStringExtra(SaveTagActivity.URL)
-//                        val tags = data?.getStringArrayExtra(SaveTagActivity.TAGS)
-//                        if (title != null
-//                                && url != null
-//                                && tags != null) {
-//                            mainPresenter?.saveToDB(title, url, tags.asList())
-//                        }
-//                    }
-//                }
-//            }
-        }
-
-        super.onActivityResult(requestCode, resultCode, data)
-        saveData()
-    }
-
+    
     override fun onStart() {
         super.onStart()
         this.mainPresenter?.checkClipboard()
