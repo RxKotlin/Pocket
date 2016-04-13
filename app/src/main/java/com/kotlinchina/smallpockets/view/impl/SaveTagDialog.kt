@@ -20,11 +20,6 @@ class SaveTagDialog: DialogFragment() {
     var onSave: ((data: Map<String, Any>)->Unit)? = null
     var saveTagGroup: TagGroup? = null
 
-    override fun onAttach(context: Context?) {
-        super.onAttach(context)
-        saveTagGroup = activity.findViewById(R.id.save_tag_group) as TagGroup
-    }
-
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog? {
         val builder = AlertDialog.Builder(activity)
         val title = arguments?.getString(TITLE)
