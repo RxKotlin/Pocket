@@ -24,7 +24,7 @@ import net.hockeyapp.android.CrashManager
 import java.util.*
 
 
-class MainActivity : AppCompatActivity(), IMainView, SaveTagDialogListener {
+class MainActivity : AppCompatActivity(), IMainView {
 
     companion object {
         val SAVE_TAGS = "1000"
@@ -130,10 +130,6 @@ class MainActivity : AppCompatActivity(), IMainView, SaveTagDialogListener {
 
         super.onActivityResult(requestCode, resultCode, data)
         saveData()
-    }
-
-    override fun onDialogPositiveClick(dialog: DialogFragment) {
-
     }
 
     override fun onStart() {

@@ -9,10 +9,6 @@ import android.os.Bundle
 import com.kotlinchina.smallpockets.R
 import me.gujun.android.taggroup.TagGroup
 
-interface SaveTagDialogListener {
-    fun onDialogPositiveClick(dialog: DialogFragment)
-}
-
 class SaveTagDialog: DialogFragment() {
 
     companion object {
@@ -21,12 +17,10 @@ class SaveTagDialog: DialogFragment() {
         val TAGS = "tags"
     }
 
-    var saveTagDialogListener: SaveTagDialogListener? = null
     var saveTagGroup: TagGroup? = null
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
-        saveTagDialogListener = context as SaveTagDialogListener
         saveTagGroup = activity.findViewById(R.id.save_tag_group) as TagGroup
     }
 
@@ -40,7 +34,6 @@ class SaveTagDialog: DialogFragment() {
                 .setMessage(url)
                 .setPositiveButton("Save", { dialogInterface, i ->
                     saveTagGroup?.tags
-                    saveTagDialogListener?.onDialogPositiveClick(this)
                 })
 
         return builder.create()
