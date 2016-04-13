@@ -108,6 +108,14 @@ class MainActivity : AppCompatActivity(), IMainView {
         bundle.putString(SaveTagDialog.URL, url)
         dialog.arguments = bundle
         dialog.onSave = { data ->
+            val title = data[SaveTagDialog.TITLE] as? String
+            val url = data[SaveTagDialog.URL] as? String
+            val tags = data[SaveTagDialog.TAGS] as? List<String>
+            if (title != null
+                    && url != null
+                    && tags != null) {
+                mainPresenter?.saveToDB(title, url, tags)
+            }
         }
         dialog.show(fragmentManager, SAVE_TAGS)
     }

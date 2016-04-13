@@ -30,13 +30,21 @@ class SaveTagDialog: DialogFragment() {
         val title = arguments?.getString(TITLE)
         val url = arguments?.getString(URL)
         val layoutInflater = activity.layoutInflater
-        builder.setView(layoutInflater.inflate(R.layout.activity_save_tag, null))
+        val view = layoutInflater.inflate(R.layout.activity_save_tag, null)
+        builder.setView(view)
                 .setTitle(title)
                 .setMessage(url)
                 .setPositiveButton("Save", { dialogInterface, i ->
-                    saveTagGroup?.tags
+                    val tags = saveTagGroup?.tags
+                    if (title != null && url != null && tags != null) {
+                        this@SaveTagDialog.onSave?.invoke(mapOf(
+                                TITLE to title,
+                                URL to url,
+                                TAGS to tags.toList()
+                        ))
+                    }
                 })
-
+        saveTagGroup = view.findViewById(R.id.save_tag_group) as? TagGroup
         return builder.create()
     }
 }
