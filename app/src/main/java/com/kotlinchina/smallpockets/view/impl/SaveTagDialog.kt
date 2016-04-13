@@ -32,10 +32,11 @@ class SaveTagDialog: DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog? {
         val builder = AlertDialog.Builder(activity)
+        val title = arguments?.getString(TITLE)
         val url = arguments?.getString(URL)
         val layoutInflater = activity.layoutInflater
         builder.setView(layoutInflater.inflate(R.layout.activity_save_tag, null))
-                .setTitle("Save Link")
+                .setTitle(title)
                 .setMessage(url)
                 .setPositiveButton("Save", DialogInterface.OnClickListener { dialogInterface, i ->
                     saveTagGroup?.tags

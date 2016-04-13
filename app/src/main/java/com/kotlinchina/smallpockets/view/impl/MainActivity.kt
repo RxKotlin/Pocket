@@ -104,6 +104,7 @@ class MainActivity : AppCompatActivity(), IMainView, SaveTagDialogListener {
     override fun showSaveScreenWithTitle(title: String, url: String) {
         val dialog = SaveTagDialog()
         var bundle = Bundle()
+        bundle.putString(SaveTagDialog.TITLE, title)
         bundle.putString(SaveTagDialog.URL, url)
         dialog.arguments = bundle
         dialog.show(fragmentManager, "1")
