@@ -38,7 +38,7 @@ class SaveTagDialog: DialogFragment() {
         builder.setView(layoutInflater.inflate(R.layout.activity_save_tag, null))
                 .setTitle(title)
                 .setMessage(url)
-                .setPositiveButton("Save", DialogInterface.OnClickListener { dialogInterface, i ->
+                .setPositiveButton("Save", { dialogInterface, i ->
                     saveTagGroup?.tags
                     saveTagDialogListener?.onDialogPositiveClick(this)
                 })
