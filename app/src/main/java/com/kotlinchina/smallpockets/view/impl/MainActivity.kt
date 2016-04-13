@@ -1,5 +1,6 @@
 package com.kotlinchina.smallpockets.view.impl
 
+import android.app.DialogFragment
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
@@ -23,7 +24,7 @@ import net.hockeyapp.android.CrashManager
 import java.util.*
 
 
-class MainActivity : AppCompatActivity(), IMainView {
+class MainActivity : AppCompatActivity(), IMainView, SaveTagDialogListener {
 
     companion object {
         val SAVE_TAGS = 1000
@@ -101,32 +102,37 @@ class MainActivity : AppCompatActivity(), IMainView {
     }
 
     override fun showSaveScreenWithTitle(title: String, url: String) {
-        val intent = Intent(this@MainActivity, SaveTagActivity::class.java)
-        intent.putExtra(SaveTagActivity.TITLE, title)
-        intent.putExtra(SaveTagActivity.URL, url)
-        startActivityForResult(intent, SAVE_TAGS)
+        val dialog = SaveTagDialog()
+        var bundle = Bundle()
+        bundle.putString(SaveTagDialog.URL, url)
+        dialog.arguments = bundle
+        dialog.show(fragmentManager, "1")
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         fun saveData() {
-            if (resultCode == RESULT_OK) {
-                when (requestCode) {
-                    SAVE_TAGS -> {
-                        val title = data?.getStringExtra(SaveTagActivity.TITLE)
-                        val url = data?.getStringExtra(SaveTagActivity.URL)
-                        val tags = data?.getStringArrayExtra(SaveTagActivity.TAGS)
-                        if (title != null
-                                && url != null
-                                && tags != null) {
-                            mainPresenter?.saveToDB(title, url, tags.asList())
-                        }
-                    }
-                }
-            }
+//            if (resultCode == RESULT_OK) {
+//                when (requestCode) {
+//                    SAVE_TAGS -> {
+//                        val title = data?.getStringExtra(SaveTagActivity.TITLE)
+//                        val url = data?.getStringExtra(SaveTagActivity.URL)
+//                        val tags = data?.getStringArrayExtra(SaveTagActivity.TAGS)
+//                        if (title != null
+//                                && url != null
+//                                && tags != null) {
+//                            mainPresenter?.saveToDB(title, url, tags.asList())
+//                        }
+//                    }
+//                }
+//            }
         }
 
         super.onActivityResult(requestCode, resultCode, data)
         saveData()
+    }
+
+    override fun onDialogPositiveClick(dialog: DialogFragment) {
+
     }
 
     override fun onStart() {
