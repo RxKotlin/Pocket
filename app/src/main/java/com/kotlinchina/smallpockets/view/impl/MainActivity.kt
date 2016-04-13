@@ -27,7 +27,7 @@ import java.util.*
 class MainActivity : AppCompatActivity(), IMainView, SaveTagDialogListener {
 
     companion object {
-        val SAVE_TAGS = 1000
+        val SAVE_TAGS = "1000"
     }
 
     val CLIPBOARD_TAG: String = "CLIPBOARD"
@@ -107,7 +107,7 @@ class MainActivity : AppCompatActivity(), IMainView, SaveTagDialogListener {
         bundle.putString(SaveTagDialog.TITLE, title)
         bundle.putString(SaveTagDialog.URL, url)
         dialog.arguments = bundle
-        dialog.show(fragmentManager, "1")
+        dialog.show(fragmentManager, SAVE_TAGS)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
