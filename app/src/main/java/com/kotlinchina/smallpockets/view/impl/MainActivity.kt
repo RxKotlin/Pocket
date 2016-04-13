@@ -107,6 +107,8 @@ class MainActivity : AppCompatActivity(), IMainView {
         bundle.putString(SaveTagDialog.TITLE, title)
         bundle.putString(SaveTagDialog.URL, url)
         dialog.arguments = bundle
+        dialog.onSave = { data ->
+        }
         dialog.show(fragmentManager, SAVE_TAGS)
     }
 

@@ -17,6 +17,7 @@ class SaveTagDialog: DialogFragment() {
         val TAGS = "tags"
     }
 
+    var onSave: ((data: Map<String, Any>)->Unit)? = null
     var saveTagGroup: TagGroup? = null
 
     override fun onAttach(context: Context?) {
