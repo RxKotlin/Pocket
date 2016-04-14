@@ -13,7 +13,10 @@ import java.net.URL
 import java.text.SimpleDateFormat
 import java.util.*
 
-class MainPresenter(mainView: IMainView, context: Context, httpService: HttpService, storeService: StoreService, clipboardService: ClipboardService,iparseDom: IParseDom, dataBaseStore: IDataBaseStore, linksToHTML: ILinksToHTML): IMainPresenter {
+class MainPresenter(mainView: IMainView, context: Context, httpService: HttpService,
+                    storeService: StoreService, clipboardService: ClipboardService,
+                    iparseDom: IParseDom, dataBaseStore: IDataBaseStore,
+                    linksToHTML: ILinksToHTML): IMainPresenter {
 
     var mainView: IMainView
     val context: Context
@@ -50,16 +53,18 @@ class MainPresenter(mainView: IMainView, context: Context, httpService: HttpServ
         this.mainView.setSiteListData(dataBaseStore.loadData())
     }
 
-
     override fun refreshList() {
         this.mainView.setSiteListData(dataBaseStore.loadData())
     }
 
+
     override fun sycLinksOfCurrentWeekToCloud(today: Date) {
+
         fun titleForm(beginDate: Date, endDate: Date): String  {
             val simpleDateFormat = SimpleDateFormat("MM-dd")
             return "${simpleDateFormat.format(beginDate)} ~ ${simpleDateFormat.format(endDate)} Weekly"
         }
+
         val datePair = CalendarService().getMondayAndSundayDateOfThisWeek(today)
         val title = titleForm(datePair.first, datePair.second)
         val links = dataBaseStore.queryDataByDate(datePair.first, datePair.second)

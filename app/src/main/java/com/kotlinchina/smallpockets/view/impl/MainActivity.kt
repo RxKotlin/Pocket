@@ -1,7 +1,5 @@
 package com.kotlinchina.smallpockets.view.impl
 
-import android.app.DialogFragment
-import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
@@ -10,6 +8,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.ListView
 import android.widget.Toast
+import com.evernote.client.android.login.EvernoteLoginFragment
 import com.kotlinchina.smallpockets.BuildConfig
 import com.kotlinchina.smallpockets.R
 import com.kotlinchina.smallpockets.adapter.ShowSiteListAdapter
@@ -24,12 +23,11 @@ import net.hockeyapp.android.CrashManager
 import java.util.*
 
 
-class MainActivity : AppCompatActivity(), IMainView {
-
+class MainActivity : AppCompatActivity(), IMainView, EvernoteLoginFragment.ResultCallback {
     companion object {
+
         val SAVE_TAGS = "1000"
     }
-
     val CLIPBOARD_TAG: String = "CLIPBOARD"
 
     var mainPresenter: IMainPresenter? = null
@@ -119,11 +117,10 @@ class MainActivity : AppCompatActivity(), IMainView {
         }
         dialog.show(fragmentManager, SAVE_TAGS)
     }
-    
+
     override fun onStart() {
         super.onStart()
         this.mainPresenter?.checkClipboard()
-        checkEvernoteLogin()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -132,16 +129,19 @@ class MainActivity : AppCompatActivity(), IMainView {
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        mainPresenter?.sycLinksOfCurrentWeekToCloud(Date())
+        if (checkEvernoteLogin()) {
+            mainPresenter?.sycLinksOfCurrentWeekToCloud(Date())
+        } else {
+            val everNoteSession = (application as? PocketApplication)?.everNoteSession
+            everNoteSession?.authenticate(this)
+        }
         return true
     }
 
-    private fun checkEvernoteLogin() {
+    private fun checkEvernoteLogin(): Boolean {
         val everNoteSession = (application as? PocketApplication)?.everNoteSession
         val logined = everNoteSession?.isLoggedIn
-        if (logined != null && !logined) {
-            everNoteSession?.authenticate(this)
-        }
+        return logined ?: false
     }
 
     override fun showSaveCloudResult(message: String) {
@@ -150,5 +150,13 @@ class MainActivity : AppCompatActivity(), IMainView {
 
     override fun onDestroy() {
         super.onDestroy()
+    }
+
+    override fun onLoginFinished(successful: Boolean) {
+        if (successful) {
+            mainPresenter?.sycLinksOfCurrentWeekToCloud(Date())
+        } else {
+            Toast.makeText(this, "authentication failed", Toast.LENGTH_SHORT).show()
+        }
     }
 }
