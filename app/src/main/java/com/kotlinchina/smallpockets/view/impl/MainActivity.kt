@@ -25,7 +25,6 @@ import java.util.*
 
 class MainActivity : AppCompatActivity(), IMainView, EvernoteLoginFragment.ResultCallback {
     companion object {
-
         val SAVE_TAGS = "1000"
     }
     val CLIPBOARD_TAG: String = "CLIPBOARD"
