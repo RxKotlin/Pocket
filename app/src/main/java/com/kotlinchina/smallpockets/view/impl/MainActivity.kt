@@ -1,6 +1,5 @@
 package com.kotlinchina.smallpockets.view.impl
 
-import android.content.Intent
 import android.os.Bundle
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.AlertDialog
@@ -11,6 +10,7 @@ import android.view.MenuItem
 import android.widget.ListView
 import android.widget.RelativeLayout
 import android.widget.Toast
+import com.evernote.client.android.login.EvernoteLoginFragment
 import com.kotlinchina.smallpockets.BuildConfig
 import com.kotlinchina.smallpockets.R
 import com.kotlinchina.smallpockets.adapter.ShowSiteListAdapter
@@ -26,12 +26,10 @@ import net.hockeyapp.android.CrashManager
 import java.util.*
 
 
-class MainActivity : AppCompatActivity(), IMainView {
-
+class MainActivity : AppCompatActivity(), IMainView, EvernoteLoginFragment.ResultCallback {
     companion object {
-        val SAVE_TAGS = 1000
+        val SAVE_TAGS = "1000"
     }
-
     val CLIPBOARD_TAG: String = "CLIPBOARD"
 
     var mainPresenter: IMainPresenter? = null
@@ -111,38 +109,27 @@ class MainActivity : AppCompatActivity(), IMainView {
     }
 
     override fun showSaveScreenWithTitle(title: String, url: String) {
-        val intent = Intent(this@MainActivity, SaveTagActivity::class.java)
-        intent.putExtra(SaveTagActivity.TITLE, title)
-        intent.putExtra(SaveTagActivity.URL, url)
-        startActivityForResult(intent, SAVE_TAGS)
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        fun saveData() {
-            if (resultCode == RESULT_OK) {
-                when (requestCode) {
-                    SAVE_TAGS -> {
-                        val title = data?.getStringExtra(SaveTagActivity.TITLE)
-                        val url = data?.getStringExtra(SaveTagActivity.URL)
-                        val tags = data?.getStringArrayExtra(SaveTagActivity.TAGS)
-                        if (title != null
-                                && url != null
-                                && tags != null) {
-                            mainPresenter?.saveToDB(title, url, tags.asList())
-                        }
-                    }
-                }
+        val dialog = SaveTagDialog()
+        var bundle = Bundle()
+        bundle.putString(SaveTagDialog.TITLE, title)
+        bundle.putString(SaveTagDialog.URL, url)
+        dialog.arguments = bundle
+        dialog.onSave = { data ->
+            val title = data[SaveTagDialog.TITLE] as? String
+            val url = data[SaveTagDialog.URL] as? String
+            val tags = data[SaveTagDialog.TAGS] as? List<String>
+            if (title != null
+                    && url != null
+                    && tags != null) {
+                mainPresenter?.saveToDB(title, url, tags)
             }
         }
-
-        super.onActivityResult(requestCode, resultCode, data)
-        saveData()
+        dialog.show(fragmentManager, SAVE_TAGS)
     }
 
     override fun onStart() {
         super.onStart()
         this.mainPresenter?.checkClipboard()
-        checkEvernoteLogin()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -151,16 +138,19 @@ class MainActivity : AppCompatActivity(), IMainView {
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        mainPresenter?.sycLinksOfCurrentWeekToCloud(Date())
+        if (checkEvernoteLogin()) {
+            mainPresenter?.sycLinksOfCurrentWeekToCloud(Date())
+        } else {
+            val everNoteSession = (application as? PocketApplication)?.everNoteSession
+            everNoteSession?.authenticate(this)
+        }
         return true
     }
 
-    private fun checkEvernoteLogin() {
+    private fun checkEvernoteLogin(): Boolean {
         val everNoteSession = (application as? PocketApplication)?.everNoteSession
         val logined = everNoteSession?.isLoggedIn
-        if (logined != null && !logined) {
-            everNoteSession?.authenticate(this)
-        }
+        return logined ?: false
     }
 
     override fun showSaveCloudResult(message: String) {
@@ -169,5 +159,13 @@ class MainActivity : AppCompatActivity(), IMainView {
 
     override fun onDestroy() {
         super.onDestroy()
+    }
+
+    override fun onLoginFinished(successful: Boolean) {
+        if (successful) {
+            mainPresenter?.sycLinksOfCurrentWeekToCloud(Date())
+        } else {
+            Toast.makeText(this, "authentication failed", Toast.LENGTH_SHORT).show()
+        }
     }
 }
