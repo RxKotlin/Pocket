@@ -56,6 +56,11 @@ class MainActivity : AppCompatActivity(), IMainView, EvernoteLoginFragment.Resul
         setOnclickListener()
     }
 
+    override fun onStart() {
+        super.onStart()
+        this.mainPresenter?.checkClipboard()
+    }
+
     override fun onResume() {
         super.onResume()
         CrashManager.register(this)
@@ -67,9 +72,13 @@ class MainActivity : AppCompatActivity(), IMainView, EvernoteLoginFragment.Resul
         }
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+    }
+
     private fun initView() {
         listview = this.findViewById(R.id.listView) as ListView
-
+        mainPresenter?.refreshList()
     }
 
     override fun showDialog(link: String) {
@@ -83,19 +92,8 @@ class MainActivity : AppCompatActivity(), IMainView, EvernoteLoginFragment.Resul
         })
         dialog.setNegativeButton(R.string.Cancel, { dialogInterface, i ->
             Log.d(CLIPBOARD_TAG, "Cancel")
-            mainPresenter?.refreshList()
         })
         dialog.show()
-    }
-
-    override fun showNoLinkWithMsg(msg: String) {
-        Log.e(CLIPBOARD_TAG, msg)
-    }
-
-    override fun setSiteListData(data: List<Link>) {
-        datas?.clear()
-        adapter = ShowSiteListAdapter(this, R.layout.show_site_list_item, data)
-        listview?.adapter = adapter
     }
 
     override fun showSaveScreenWithTitle(title: String, url: String) {
@@ -117,9 +115,32 @@ class MainActivity : AppCompatActivity(), IMainView, EvernoteLoginFragment.Resul
         dialog.show(fragmentManager, SAVE_TAGS)
     }
 
-    override fun onStart() {
-        super.onStart()
-        this.mainPresenter?.checkClipboard()
+    override fun showNoLinkWithMsg(msg: String) {
+        Log.e(CLIPBOARD_TAG, msg)
+    }
+
+    override fun setSiteListData(data: List<Link>) {
+        datas?.clear()
+        adapter = ShowSiteListAdapter(this, R.layout.show_site_list_item, data)
+        listview?.adapter = adapter
+    }
+
+    private fun checkEvernoteLogin(): Boolean {
+        val everNoteSession = (application as? PocketApplication)?.everNoteSession
+        val logined = everNoteSession?.isLoggedIn
+        return logined ?: false
+    }
+
+    override fun showSaveCloudResult(message: String) {
+        Toast.makeText(this@MainActivity, message, Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onLoginFinished(successful: Boolean) {
+        if (successful) {
+            mainPresenter?.sycLinksOfCurrentWeekToCloud(Date())
+        } else {
+            Toast.makeText(this, "authentication failed", Toast.LENGTH_SHORT).show()
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -135,27 +156,5 @@ class MainActivity : AppCompatActivity(), IMainView, EvernoteLoginFragment.Resul
             everNoteSession?.authenticate(this)
         }
         return true
-    }
-
-    private fun checkEvernoteLogin(): Boolean {
-        val everNoteSession = (application as? PocketApplication)?.everNoteSession
-        val logined = everNoteSession?.isLoggedIn
-        return logined ?: false
-    }
-
-    override fun showSaveCloudResult(message: String) {
-        Toast.makeText(this@MainActivity, message, Toast.LENGTH_SHORT).show()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-    }
-
-    override fun onLoginFinished(successful: Boolean) {
-        if (successful) {
-            mainPresenter?.sycLinksOfCurrentWeekToCloud(Date())
-        } else {
-            Toast.makeText(this, "authentication failed", Toast.LENGTH_SHORT).show()
-        }
     }
 }
