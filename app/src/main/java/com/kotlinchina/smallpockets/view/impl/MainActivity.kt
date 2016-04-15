@@ -1,12 +1,14 @@
 package com.kotlinchina.smallpockets.view.impl
 
 import android.os.Bundle
+import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.ListView
+import android.widget.RelativeLayout
 import android.widget.Toast
 import com.evernote.client.android.login.EvernoteLoginFragment
 import com.kotlinchina.smallpockets.BuildConfig
@@ -18,6 +20,7 @@ import com.kotlinchina.smallpockets.presenter.IMainPresenter
 import com.kotlinchina.smallpockets.presenter.impl.MainPresenter
 import com.kotlinchina.smallpockets.service.impl.*
 import com.kotlinchina.smallpockets.transform.impl.LinksToHTMLWithHTMLEngine
+import com.kotlinchina.smallpockets.view.Fragment.BaseWebViewFragment
 import com.kotlinchina.smallpockets.view.IMainView
 import net.hockeyapp.android.CrashManager
 import java.util.*
@@ -36,6 +39,9 @@ class MainActivity : AppCompatActivity(), IMainView, EvernoteLoginFragment.Resul
     val datas: MutableList<Link>? = null
 
     var adapter: ShowSiteListAdapter? = null
+
+    var mDrawerLayout: DrawerLayout? = null
+    var drawer_content: RelativeLayout? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,12 +70,16 @@ class MainActivity : AppCompatActivity(), IMainView, EvernoteLoginFragment.Resul
     private fun setOnclickListener() {
         listview?.setOnItemClickListener { adapterView, view, i, l ->
             Toast.makeText(this@MainActivity,"show detail"+ ": position" +l, Toast.LENGTH_SHORT).show()
+            //在这里可以取得URl传递 过去即可
+            supportFragmentManager.beginTransaction().replace(R.id.drawer_content, BaseWebViewFragment()).commit()
+            mDrawerLayout?.openDrawer(drawer_content)//打开抽屉内容
         }
     }
 
     private fun initView() {
         listview = this.findViewById(R.id.listView) as ListView
-
+        mDrawerLayout = this.findViewById(R.id.drawer_layout) as DrawerLayout
+        drawer_content = this.findViewById(R.id.drawer_content) as RelativeLayout
     }
 
     override fun showDialog(link: String) {
