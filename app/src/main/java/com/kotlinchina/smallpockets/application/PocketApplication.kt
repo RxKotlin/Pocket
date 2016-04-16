@@ -10,7 +10,7 @@ class PocketApplication : Application() {
     companion object {
         val CONSUMER_KEY = "itrufeng"
         val CONSUMER_SECRET = "08278d04ea274374"
-        val EVERNOTE_SERVICE = EvernoteSession.EvernoteService.SANDBOX
+        val EVERNOTE_SERVICE = EvernoteSession.EvernoteService.PRODUCTION
     }
     var everNoteSession: EvernoteSession? = null
 
