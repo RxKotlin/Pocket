@@ -33,10 +33,19 @@ android {
         // HockeyApp
         manifestPlaceholders = [HOCKEYAPP_APP_ID: 'afc9159ea81e4aaaaa37e4cdc4b62b2f']
     }
+    signingConfigs {
+        release {
+            keyAlias 'SmallPocket'
+            keyPassword releasePassword
+            storeFile file('keystore/release.jks')
+            storePassword releasePassword
+        }
+    }
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
     }
     sourceSets {
