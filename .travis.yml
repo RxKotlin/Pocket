@@ -14,7 +14,7 @@ script: ./gradlew test
 
 deploy:
   provider: script
-  script: ./gradlew uploadRelaseToHockeyApp
+  script: ./gradlew uploadReleaseToHockeyApp
   on:
     branch: master
 
