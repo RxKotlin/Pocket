@@ -40,9 +40,6 @@ class MainPresenter(mainView: IMainView, context: Context, httpService: HttpServ
 
     override fun getTitleWithURL(url: String) {
           httpService.fetchDataWithUrl(url)
-                .map { t ->
-                    iparseDom.getTitle(t)
-                }
                 .subscribe { title ->
                     if (title != null) mainView.showSaveScreenWithTitle(title, url)
                 }
