@@ -45,7 +45,7 @@ class MainActivity : AppCompatActivity(), IMainView, EvernoteLoginFragment.Resul
 
         this.mainPresenter = MainPresenter(mainView = this,
                 context = applicationContext,
-                httpService = VolleyHttpService(this),
+                httpService = WebViewClientHttpService(this),
                 storeService = EvernoteStoreService(application),
                 clipboardService = clipboardService,
                 iparseDom = JxPathParseDom(),

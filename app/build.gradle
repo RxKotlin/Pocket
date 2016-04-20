@@ -36,9 +36,9 @@ android {
     signingConfigs {
         release {
             keyAlias 'SmallPocket'
-            keyPassword releasePassword
+            keyPassword 'kotlinchina'
             storeFile file('keystore/release.jks')
-            storePassword releasePassword
+            storePassword 'kotlinchina'
         }
     }
     buildTypes {
