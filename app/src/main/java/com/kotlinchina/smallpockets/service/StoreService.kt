@@ -1,6 +1,5 @@
 package com.kotlinchina.smallpockets.service
 
-import com.kotlinchina.smallpockets.model.Link
 import rx.Observable
 
 interface StoreService {

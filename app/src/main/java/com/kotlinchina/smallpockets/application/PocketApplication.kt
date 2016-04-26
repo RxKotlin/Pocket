@@ -4,7 +4,6 @@ import android.app.Application
 import com.evernote.client.android.EvernoteSession
 import io.realm.Realm
 import io.realm.RealmConfiguration
-
 class PocketApplication : Application() {
 
     companion object {
@@ -33,3 +32,4 @@ class PocketApplication : Application() {
                 .asSingleton()
     }
 }
+
