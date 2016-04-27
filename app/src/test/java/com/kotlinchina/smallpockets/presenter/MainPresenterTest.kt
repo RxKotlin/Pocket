@@ -43,7 +43,7 @@ class MainPresenterTest {
         given(dataBaseStore!!.queryDataByDate(link1.createDate!!, today)).willReturn(lists)
         given(shareService!!.share(anyString(), anyString())).willReturn(success)
         given(linksToHTML!!.html(anyListOf(Link::class.java))).willReturn("")
-        presenter!!.sycLinksOfCurrentWeekToCloud(today)
+        presenter!!.shareWeeklyLinks(today)
         then(mainView!!).should(times(1)).showSaveCloudResult("Cool")
     }
 }

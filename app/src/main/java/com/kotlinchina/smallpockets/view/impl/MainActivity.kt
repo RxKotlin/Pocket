@@ -47,7 +47,7 @@ class MainActivity : AppCompatActivity(), IMainView, EvernoteLoginFragment.Resul
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         if (checkEvernoteLogin()) {
-            mainPresenter?.sycLinksOfCurrentWeekToCloud(Date())
+            mainPresenter?.shareWeeklyLinks(Date())
         } else {
             evernoteSession?.authenticate(this)
         }
@@ -60,7 +60,7 @@ class MainActivity : AppCompatActivity(), IMainView, EvernoteLoginFragment.Resul
     }
 
     override fun onLoginFinished(successful: Boolean) {
-        mainPresenter?.sycLinksOfCurrentWeekToCloud(Date())
+        mainPresenter?.shareWeeklyLinks(Date())
     }
 
     override fun showSaveCloudResult(msg: String) {

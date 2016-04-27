@@ -24,13 +24,13 @@ class MainPresenter: IMainPresenter {
         this.shareService = shareService
     }
 
-    override fun sycLinksOfCurrentWeekToCloud(today: Date) {
+    override fun shareWeeklyLinks(fromDate: Date) {
         fun titleForm(beginDate: Date, endDate: Date): String  {
             val simpleDateFormat = SimpleDateFormat("MM-dd")
             return "${simpleDateFormat.format(beginDate)} ~ ${simpleDateFormat.format(endDate)} Weekly"
         }
 
-        val datePair = CalendarService().getMondayAndSundayDateOfThisWeek(today)
+        val datePair = CalendarService().getMondayAndSundayDateOfThisWeek(fromDate)
         val title = titleForm(datePair.first, datePair.second)
         val links = dataBaseStore?.queryDataByDate(datePair.first, datePair.second)
         val html = linksToHTML?.html(links!!)
