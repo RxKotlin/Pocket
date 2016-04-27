@@ -4,7 +4,7 @@ import com.kotlinchina.smallpockets.model.Link
 import com.kotlinchina.smallpockets.model.impl.CoreLink
 import com.kotlinchina.smallpockets.presenter.impl.MainPresenter
 import com.kotlinchina.smallpockets.service.IDataBaseStore
-import com.kotlinchina.smallpockets.service.StoreService
+import com.kotlinchina.smallpockets.service.ShareService
 import com.kotlinchina.smallpockets.transform.ILinksToHTML
 import com.kotlinchina.smallpockets.view.IMainView
 import org.junit.Before
@@ -18,15 +18,15 @@ class MainPresenterTest {
     var mainView: IMainView? = null
     var dataBaseStore: IDataBaseStore? = null
     var linksToHTML: ILinksToHTML? = null
-    var storeService: StoreService? = null
+    var shareService: ShareService? = null
 
     @Before
     fun setUp() {
         mainView = mock(IMainView::class.java)
         dataBaseStore = mock(IDataBaseStore::class.java)
         linksToHTML = mock(ILinksToHTML::class.java)
-        storeService = mock(StoreService::class.java)
-        presenter = MainPresenter(mainView!!, dataBaseStore!!, linksToHTML!!, storeService!!)
+        shareService = mock(ShareService::class.java)
+        presenter = MainPresenter(mainView!!, dataBaseStore!!, linksToHTML!!, shareService!!)
     }
 
 
@@ -41,7 +41,7 @@ class MainPresenterTest {
             it.onCompleted()
         }
         given(dataBaseStore!!.queryDataByDate(link1.createDate!!, today)).willReturn(lists)
-        given(storeService!!.store(anyString(), anyString())).willReturn(success)
+        given(shareService!!.share(anyString(), anyString())).willReturn(success)
         given(linksToHTML!!.html(anyListOf(Link::class.java))).willReturn("")
         presenter!!.sycLinksOfCurrentWeekToCloud(today)
         then(mainView!!).should(times(1)).showSaveCloudResult("Cool")

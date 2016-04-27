@@ -14,14 +14,14 @@ class MainPresenter: IMainPresenter {
     var mainView: IMainView? = null
     var dataBaseStore: IDataBaseStore? = null
     var linksToHTML: ILinksToHTML? = null
-    var storeService: StoreService? = null
+    var shareService: ShareService? = null
 
     constructor(mainView: IMainView, dataBaseStore: IDataBaseStore, linksToHTML: ILinksToHTML,
-                storeService: StoreService) {
+                shareService: ShareService) {
         this.mainView = mainView
         this.dataBaseStore = dataBaseStore
         this.linksToHTML = linksToHTML
-        this.storeService = storeService
+        this.shareService = shareService
     }
 
     override fun sycLinksOfCurrentWeekToCloud(today: Date) {
@@ -39,7 +39,7 @@ class MainPresenter: IMainPresenter {
             return
         }
 
-        storeService?.store(title, html)?.subscribe ({
+        shareService?.share(title, html)?.subscribe ({
             this.mainView?.showSaveCloudResult("Cool")
         }, {
             this.mainView?.showSaveCloudResult(it.message!!)

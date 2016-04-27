@@ -11,7 +11,7 @@ import com.evernote.client.android.login.EvernoteLoginFragment
 import com.kotlinchina.smallpockets.R
 import com.kotlinchina.smallpockets.presenter.IMainPresenter
 import com.kotlinchina.smallpockets.presenter.impl.MainPresenter
-import com.kotlinchina.smallpockets.service.impl.EvernoteStoreService
+import com.kotlinchina.smallpockets.service.impl.EvernoteShareService
 import com.kotlinchina.smallpockets.service.impl.RealmStore
 import com.kotlinchina.smallpockets.transform.impl.LinksToHTMLWithHTMLEngine
 import com.kotlinchina.smallpockets.view.IMainView
@@ -88,7 +88,7 @@ class MainActivity : AppCompatActivity(), IMainView, EvernoteLoginFragment.Resul
 
     private fun setupPresneter() {
         val evernoteSession = setupEvernoteSession() ?: return
-        mainPresenter = MainPresenter(this, RealmStore(), LinksToHTMLWithHTMLEngine(this), EvernoteStoreService(evernoteSession))
+        mainPresenter = MainPresenter(this, RealmStore(), LinksToHTMLWithHTMLEngine(this), EvernoteShareService(evernoteSession))
         this.evernoteSession = evernoteSession
     }
 

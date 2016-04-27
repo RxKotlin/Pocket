@@ -4,16 +4,16 @@ import com.evernote.client.android.EvernoteSession
 import com.evernote.client.android.EvernoteUtil
 import com.evernote.client.android.asyncclient.EvernoteCallback
 import com.evernote.edam.type.Note
-import com.kotlinchina.smallpockets.service.StoreService
+import com.kotlinchina.smallpockets.service.ShareService
 import rx.Observable
 import rx.lang.kotlin.observable
 
-class EvernoteStoreService(evernoteSession: EvernoteSession): StoreService {
+class EvernoteShareService(evernoteSession: EvernoteSession): ShareService {
     private val evernoteSession: EvernoteSession
     init {
         this.evernoteSession = evernoteSession
     }
-    override fun store(title: String, content: String): Observable<String> {
+    override fun share(title: String, content: String): Observable<String> {
         return observable {
             val note = Note()
             note.title = title
