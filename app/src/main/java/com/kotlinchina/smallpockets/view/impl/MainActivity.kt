@@ -3,14 +3,12 @@ package com.kotlinchina.smallpockets.view.impl
 import android.os.Bundle
 
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import com.evernote.client.android.EvernoteSession
 import com.evernote.client.android.login.EvernoteLoginFragment
 import com.kotlinchina.smallpockets.R
-import com.kotlinchina.smallpockets.application.PocketApplication
 import com.kotlinchina.smallpockets.presenter.IMainPresenter
 import com.kotlinchina.smallpockets.presenter.impl.MainPresenter
 import com.kotlinchina.smallpockets.service.impl.EvernoteStoreService
