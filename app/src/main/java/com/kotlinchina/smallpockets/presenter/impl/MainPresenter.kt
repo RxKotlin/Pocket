@@ -14,23 +14,23 @@ class MainPresenter: IMainPresenter {
     var mainView: IMainView? = null
     var dataBaseStore: IDataBaseStore? = null
     var linksToHTML: ILinksToHTML? = null
-    var storeService: StoreService? = null
+    var shareService: ShareService? = null
 
     constructor(mainView: IMainView, dataBaseStore: IDataBaseStore, linksToHTML: ILinksToHTML,
-                storeService: StoreService) {
+                shareService: ShareService) {
         this.mainView = mainView
         this.dataBaseStore = dataBaseStore
         this.linksToHTML = linksToHTML
-        this.storeService = storeService
+        this.shareService = shareService
     }
 
-    override fun sycLinksOfCurrentWeekToCloud(today: Date) {
+    override fun shareWeeklyLinks(fromDate: Date) {
         fun titleForm(beginDate: Date, endDate: Date): String  {
             val simpleDateFormat = SimpleDateFormat("MM-dd")
             return "${simpleDateFormat.format(beginDate)} ~ ${simpleDateFormat.format(endDate)} Weekly"
         }
 
-        val datePair = CalendarService().getMondayAndSundayDateOfThisWeek(today)
+        val datePair = CalendarService().getMondayAndSundayDateOfThisWeek(fromDate)
         val title = titleForm(datePair.first, datePair.second)
         val links = dataBaseStore?.queryDataByDate(datePair.first, datePair.second)
         val html = linksToHTML?.html(links!!)
@@ -39,7 +39,7 @@ class MainPresenter: IMainPresenter {
             return
         }
 
-        storeService?.store(title, html)?.subscribe ({
+        shareService?.share(title, html)?.subscribe ({
             this.mainView?.showSaveCloudResult("Cool")
         }, {
             this.mainView?.showSaveCloudResult(it.message!!)

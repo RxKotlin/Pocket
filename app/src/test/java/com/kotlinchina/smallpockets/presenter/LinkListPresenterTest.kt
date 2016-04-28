@@ -14,7 +14,7 @@ class LinkListPresenterTest {
     var mockClipboardService: ClipboardService? = null
     var mockLinkListActivity: ILinkListView? = null
     var mockDatabaseStore: IDataBaseStore? = null
-    var mockStoreService: StoreService? = null
+    var mockShareService: ShareService? = null
     var mockLinksToHTML: ILinksToHTML? = null
 
     @Before
@@ -22,7 +22,7 @@ class LinkListPresenterTest {
         mockLinkListActivity = mock(ILinkListView::class.java)
         mockClipboardService = mock(ClipboardService::class.java)
         mockDatabaseStore = mock(IDataBaseStore::class.java)
-        mockStoreService = mock(StoreService::class.java)
+        mockShareService = mock(ShareService::class.java)
         mockLinksToHTML = mock(ILinksToHTML::class.java)
         presenter = LinkListPresenter(
                 mockLinkListActivity!!,
