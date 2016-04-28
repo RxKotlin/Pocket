@@ -7,7 +7,6 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import com.evernote.client.android.EvernoteSession
-import com.evernote.client.android.login.EvernoteLoginFragment
 import com.kotlinchina.smallpockets.R
 import com.kotlinchina.smallpockets.presenter.IMainPresenter
 import com.kotlinchina.smallpockets.presenter.impl.MainPresenter
@@ -19,7 +18,7 @@ import net.hockeyapp.android.CrashManager
 import java.io.IOException
 import java.util.*
 
-class MainActivity : AppCompatActivity(), IMainView, EvernoteLoginFragment.ResultCallback {
+class MainActivity : AppCompatActivity(), IMainView {
     companion object {
         val SAVE_TAGS = "1000"
         val EVERNOTE_SERVICE = EvernoteSession.EvernoteService.PRODUCTION
@@ -57,10 +56,6 @@ class MainActivity : AppCompatActivity(), IMainView, EvernoteLoginFragment.Resul
     private fun checkEvernoteLogin(): Boolean {
         val logined = evernoteSession?.isLoggedIn
         return logined ?: false
-    }
-
-    override fun onLoginFinished(successful: Boolean) {
-        mainPresenter?.shareWeeklyLinks(Date())
     }
 
     override fun showSaveCloudResult(msg: String) {
