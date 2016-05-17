@@ -1,9 +1,10 @@
-[![Build
-Status](https://travis-ci.org/RxKotlin/Pocket.svg?branch=master)](https://travis-ci.org/RxKotlin/Pocket)
-# SmallPocket 
+![SmallPocket](./app/src/main/res/mipmap-xxxhdpi/ic_launcher.png)
+
+# SmallPocket
 
 [![Join the chat at https://gitter.im/RxKotlin/Pocket](https://badges.gitter.im/RxKotlin/Pocket.svg)](https://gitter.im/RxKotlin/Pocket?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-![SmallPocket](./app/src/main/res/mipmap-xxxhdpi/ic_launcher.png)
+[![Build
+Status](https://travis-ci.org/RxKotlin/Pocket.svg?branch=master)](https://travis-ci.org/RxKotlin/Pocket)
 
 This is a first kotlin app, help user to save links easily, and can export to Evernote as weekly.
 
@@ -38,20 +39,20 @@ Steps:
 |---|---|
 |MainPresenter|LinkListPresenter|
 
- 
+
 ## Our Libray writen by Kotlin
 
 An HTML render engin [HtmlTemplateEngine](https://github.com/RxKotlin/HtmlTemplateEngine)
 
 ## 3rd Part Libs
 
-* [RxKotlin](https://github.com/ReactiveX/RxKotlin) 
-* [Realm](https://realm.io/) 
-* [Volley](https://github.com/mcxiaoke/android-volley) 
-* [JsoupXpath](https://github.com/zhegexiaohuozi/JsoupXpath) 
-* [HockeyApp](https://www.hockeyapp.net/) 
-* [base-adapter-helper](https://github.com/JoanZapata/base-adapter-helper) 
- 
+* [RxKotlin](https://github.com/ReactiveX/RxKotlin)
+* [Realm](https://realm.io/)
+* [Volley](https://github.com/mcxiaoke/android-volley)
+* [JsoupXpath](https://github.com/zhegexiaohuozi/JsoupXpath)
+* [HockeyApp](https://www.hockeyapp.net/)
+* [base-adapter-helper](https://github.com/JoanZapata/base-adapter-helper)
+
 
 ## License
 
@@ -65,7 +66,3 @@ The above copyright notice and this permission notice shall be included in all c
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ```
-
-
-
-
