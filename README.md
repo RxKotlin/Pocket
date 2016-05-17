@@ -12,7 +12,7 @@ Steps:
 3. query save or not
 4. click OK
 5. input tags for this link
-6. click save
+6. click save
 
 ![1](./screenshot/1k.png)
 ![2](./screenshot/2k.png)
