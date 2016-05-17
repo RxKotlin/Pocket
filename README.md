@@ -1,6 +1,8 @@
 [![Build
 Status](https://travis-ci.org/RxKotlin/Pocket.svg?branch=master)](https://travis-ci.org/RxKotlin/Pocket)
 # SmallPocket 
+
+[![Join the chat at https://gitter.im/RxKotlin/Pocket](https://badges.gitter.im/RxKotlin/Pocket.svg)](https://gitter.im/RxKotlin/Pocket?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 ![SmallPocket](./app/src/main/res/mipmap-xxxhdpi/ic_launcher.png)
 
 This is a first kotlin app, help user to save links easily, and can export to Evernote as weekly.
