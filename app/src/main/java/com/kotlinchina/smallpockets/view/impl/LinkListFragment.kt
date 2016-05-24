@@ -33,8 +33,6 @@ class LinkListFragment() : Fragment(), ILinkListView {
 
     var listview: ListView? = null
 
-  //  val datas: MutableList<Link>? = null
-
     internal var datas: MutableList<Link> = ArrayList()
 
     var adapter: ShowSiteListAdapter? = null
@@ -65,7 +63,6 @@ class LinkListFragment() : Fragment(), ILinkListView {
         listview?.setOnItemClickListener { adapterView, view, i, l ->
             Toast.makeText(activity,"show detail"+ ": position" +l, Toast.LENGTH_SHORT).show()
             //在这里可以取得URl传递 过去即可
-            //childFragmentManager.beginTransaction().replace(R.id.drawer_content, BaseWebViewFragment()).commit()
             val perSaveUrl:String? = datas?.get(i)?.url
             childFragmentManager.beginTransaction().replace(R.id.drawer_content,BaseWebViewFragment.newInstance(perSaveUrl!!)).commit()
             mDrawerLayout?.openDrawer(drawer_content)//打开抽屉内容
@@ -134,7 +131,6 @@ class LinkListFragment() : Fragment(), ILinkListView {
         }else{
             return false ;
         }
-
     }
 
 }
