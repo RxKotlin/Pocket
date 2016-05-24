@@ -1,22 +1,29 @@
 package com.kotlinchina.smallpockets.view.impl
 
-import android.app.Fragment
 import android.os.Bundle
+import android.support.v4.app.Fragment
+import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.AlertDialog
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ListView
+import android.widget.RelativeLayout
+import android.widget.Toast
 import com.kotlinchina.smallpockets.BuildConfig
 import com.kotlinchina.smallpockets.R
 import com.kotlinchina.smallpockets.adapter.ShowSiteListAdapter
 import com.kotlinchina.smallpockets.model.Link
 import com.kotlinchina.smallpockets.presenter.ILinkListPresenter
 import com.kotlinchina.smallpockets.presenter.impl.LinkListPresenter
-import com.kotlinchina.smallpockets.service.impl.*
-import com.kotlinchina.smallpockets.transform.impl.LinksToHTMLWithHTMLEngine
+import com.kotlinchina.smallpockets.service.impl.CacheClipboardService
+import com.kotlinchina.smallpockets.service.impl.DebugCacheClipboardService
+import com.kotlinchina.smallpockets.service.impl.RealmStore
+import com.kotlinchina.smallpockets.service.impl.WebViewClientHttpService
+import com.kotlinchina.smallpockets.view.Fragment.BaseWebViewFragment
 import com.kotlinchina.smallpockets.view.ILinkListView
+import java.util.*
 
 class LinkListFragment() : Fragment(), ILinkListView {
 
@@ -26,9 +33,15 @@ class LinkListFragment() : Fragment(), ILinkListView {
 
     var listview: ListView? = null
 
-    val datas: MutableList<Link>? = null
+  //  val datas: MutableList<Link>? = null
+
+    internal var datas: MutableList<Link> = ArrayList()
 
     var adapter: ShowSiteListAdapter? = null
+
+    var mDrawerLayout: DrawerLayout? = null
+
+    var drawer_content: RelativeLayout? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,16 +53,35 @@ class LinkListFragment() : Fragment(), ILinkListView {
                 dataBaseStore = RealmStore())
     }
 
-    override fun onStart() {
-        super.onStart()
-        listview = activity.findViewById(R.id.link_list) as ListView
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
         linkListPresenter?.refreshList()
         linkListPresenter?.checkClipboard()
+
+        setOnclickListener()
+    }
+
+    private fun setOnclickListener() {
+        listview?.setOnItemClickListener { adapterView, view, i, l ->
+            Toast.makeText(activity,"show detail"+ ": position" +l, Toast.LENGTH_SHORT).show()
+            //在这里可以取得URl传递 过去即可
+            //childFragmentManager.beginTransaction().replace(R.id.drawer_content, BaseWebViewFragment()).commit()
+            val perSaveUrl:String? = datas?.get(i)?.url
+            childFragmentManager.beginTransaction().replace(R.id.drawer_content,BaseWebViewFragment.newInstance(perSaveUrl!!)).commit()
+            mDrawerLayout?.openDrawer(drawer_content)//打开抽屉内容
+        }
+
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater?.inflate(R.layout.link_list_fragment, container, false)
-        return view
+        return inflater?.inflate(R.layout.link_list_fragment, container, false)
+    }
+
+    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        listview = view?.findViewById(R.id.link_list) as ListView
+        mDrawerLayout = view?.findViewById(R.id.drawer_layout) as DrawerLayout
+        drawer_content = view?.findViewById(R.id.drawer_content) as RelativeLayout
     }
 
     override fun showDialog(link: String) {
@@ -71,6 +103,7 @@ class LinkListFragment() : Fragment(), ILinkListView {
 
     override fun setSiteListData(data: List<Link>) {
         datas?.clear()
+        datas?.addAll(data)
         adapter = ShowSiteListAdapter(activity, R.layout.show_site_list_item, data)
         listview?.adapter = adapter
     }
@@ -93,4 +126,15 @@ class LinkListFragment() : Fragment(), ILinkListView {
         }
         dialog.show(fragmentManager, MainActivity.SAVE_TAGS)
     }
+
+    public fun backPressed():Boolean {
+        if(mDrawerLayout?.isDrawerOpen(drawer_content)!!){
+            mDrawerLayout?.closeDrawer(drawer_content)
+            return true ;
+        }else{
+            return false ;
+        }
+
+    }
+
 }
