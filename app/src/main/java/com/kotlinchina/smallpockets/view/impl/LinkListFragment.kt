@@ -10,7 +10,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ListView
 import android.widget.RelativeLayout
-import android.widget.Toast
 import com.kotlinchina.smallpockets.BuildConfig
 import com.kotlinchina.smallpockets.R
 import com.kotlinchina.smallpockets.adapter.ShowSiteListAdapter
@@ -55,19 +54,15 @@ class LinkListFragment() : Fragment(), ILinkListView {
         super.onActivityCreated(savedInstanceState)
         linkListPresenter?.refreshList()
         linkListPresenter?.checkClipboard()
-
         setOnclickListener()
     }
 
     private fun setOnclickListener() {
         listview?.setOnItemClickListener { adapterView, view, i, l ->
-            Toast.makeText(activity,"show detail"+ ": position" +l, Toast.LENGTH_SHORT).show()
-            //在这里可以取得URl传递 过去即可
             val perSaveUrl:String? = datas?.get(i)?.url
             childFragmentManager.beginTransaction().replace(R.id.drawer_content,BaseWebViewFragment.newInstance(perSaveUrl!!)).commit()
             mDrawerLayout?.openDrawer(drawer_content)//打开抽屉内容
         }
-
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
