@@ -18,29 +18,24 @@ import android.widget.ProgressBar
  */
 import com.kotlinchina.smallpockets.R
 
-class CusTomProgressWebView : LinearLayout {
+class CustomProgressWebView : LinearLayout {
 
     private var mWebView: WebView? = null
 
     private var mProgressBar: ProgressBar? = null
 
-    var url: String? = null
+    constructor(context: Context?) : this(context,null!!){}
 
-    constructor(context: Context?) : super(context){
-        initView(context!!) ;
-    }
-    constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs) {
-        initView(context!!) ;
-    }
+    constructor(context: Context?, attrs: AttributeSet?) : this(context, attrs,0) {}
+
     constructor(context: Context?, attrs: AttributeSet?, defStyle: Int) : super(context, attrs, defStyle) {
         initView(context!!) ;
     }
 
     private fun initView(context: Context) {
         val view = View.inflate(context, R.layout.view_web_progress, this)
-        mWebView = view?.findViewById(R.id.web_view) as WebView
-        mProgressBar = view?.findViewById(R.id.progress_bar) as ProgressBar
-
+        mWebView = view?.findViewById(R.id.web_view) as? WebView
+        mProgressBar = view?.findViewById(R.id.progress_bar) as? ProgressBar
     }
 
     fun loadUrl(url: String?) {
@@ -149,8 +144,4 @@ class CusTomProgressWebView : LinearLayout {
         }
         return true
     }
-}//	private String errorHtml = "<html><head><meta charset='UTF-8'></head><body><br><br><br><br><br><br><br><div align='center' style='font-size: smaller'  onclick='window.android.refresh()' ><a href='http://www.baidu.com' style='text-decoration: none'>暂无数据 <br/> 点击调用android方法 </a></div></body></html>";
-//	@JavascriptInterface
-//	public void refresh() {
-//		Toast.makeText(mContext, "js 调用方法", Toast.LENGTH_SHORT).show();
-//	}
+}

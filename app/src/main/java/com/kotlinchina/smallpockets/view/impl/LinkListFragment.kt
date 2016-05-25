@@ -32,7 +32,7 @@ class LinkListFragment() : Fragment(), ILinkListView {
 
     var listview: ListView? = null
 
-    internal var datas: MutableList<Link> = ArrayList()
+    var datas: MutableList<Link> = ArrayList()
 
     var adapter: ShowSiteListAdapter? = null
 
@@ -54,10 +54,10 @@ class LinkListFragment() : Fragment(), ILinkListView {
         super.onActivityCreated(savedInstanceState)
         linkListPresenter?.refreshList()
         linkListPresenter?.checkClipboard()
-        setOnclickListener()
+        setListViewOnItemClick()
     }
 
-    private fun setOnclickListener() {
+    private fun setListViewOnItemClick() {
         listview?.setOnItemClickListener { adapterView, view, i, l ->
             val perSaveUrl:String? = datas?.get(i)?.url
             childFragmentManager.beginTransaction().replace(R.id.drawer_content,BaseWebViewFragment.newInstance(perSaveUrl!!)).commit()
@@ -71,9 +71,9 @@ class LinkListFragment() : Fragment(), ILinkListView {
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        listview = view?.findViewById(R.id.link_list) as ListView
-        mDrawerLayout = view?.findViewById(R.id.drawer_layout) as DrawerLayout
-        drawer_content = view?.findViewById(R.id.drawer_content) as RelativeLayout
+        listview = view?.findViewById(R.id.link_list) as? ListView
+        mDrawerLayout = view?.findViewById(R.id.drawer_layout) as? DrawerLayout
+        drawer_content = view?.findViewById(R.id.drawer_content) as? RelativeLayout
     }
 
     override fun showDialog(link: String) {

@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.kotlinchina.smallpockets.R
-import com.kotlinchina.smallpockets.widget.CusTomProgressWebView
+import com.kotlinchina.smallpockets.widget.CustomProgressWebView
 
 /**
  * Created by junjun.
@@ -23,7 +23,7 @@ class BaseWebViewFragment : Fragment() {
         }
     }
 
-    var customProgressWebView:CusTomProgressWebView? = null
+    var customProgressWebView: CustomProgressWebView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,7 +32,7 @@ class BaseWebViewFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         //test url
-        val perItemUrl:String = arguments?.get("url") as String ;
+        val perItemUrl: String? = arguments.get("url") as? String ;
         customProgressWebView?.loadUrl(perItemUrl)
     }
 
@@ -42,6 +42,6 @@ class BaseWebViewFragment : Fragment() {
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        customProgressWebView = view?.findViewById(R.id.customProgressWebView) as CusTomProgressWebView
+        customProgressWebView = view?.findViewById(R.id.customProgressWebView) as? CustomProgressWebView
     }
 }
