@@ -16,6 +16,7 @@ Steps:
 4. click OK
 5. input tags for this link
 6. click save
+7. click link item show detail
 
 ![1](./screenshot/1k.png)
 ![2](./screenshot/2k.png)
