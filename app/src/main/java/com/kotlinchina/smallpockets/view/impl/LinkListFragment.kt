@@ -60,8 +60,8 @@ class LinkListFragment() : Fragment(), ILinkListView {
     private fun setListViewOnItemClick() {
         listview?.setOnItemClickListener { adapterView, view, i, l ->
             val perSaveUrl:String? = datas?.get(i)?.url
-            childFragmentManager.beginTransaction().replace(R.id.drawer_content,BaseWebViewFragment.newInstance(perSaveUrl!!)).commit()
-            mDrawerLayout?.openDrawer(drawer_content)//打开抽屉内容
+            childFragmentManager.beginTransaction().replace(R.id.drawer_content,BaseWebViewFragment.newInstance(perSaveUrl)).commit()
+            mDrawerLayout?.openDrawer(drawer_content)
         }
     }
 
@@ -119,8 +119,8 @@ class LinkListFragment() : Fragment(), ILinkListView {
         dialog.show(fragmentManager, MainActivity.SAVE_TAGS)
     }
 
-    public fun backPressed():Boolean {
-        if(mDrawerLayout?.isDrawerOpen(drawer_content)!!){
+    fun backPressed():Boolean {
+        if(mDrawerLayout?.isDrawerOpen(drawer_content) as Boolean){
             mDrawerLayout?.closeDrawer(drawer_content)
             return true ;
         }else{

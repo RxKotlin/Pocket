@@ -101,7 +101,7 @@ class MainActivity : AppCompatActivity(), IMainView, EvernoteLoginFragment.Resul
     }
 
     override fun onBackPressed() {
-        if(!linkListFragment?.backPressed()!!){
+        if(!(linkListFragment?.backPressed() as Boolean)){
             super.onBackPressed()
         }
     }

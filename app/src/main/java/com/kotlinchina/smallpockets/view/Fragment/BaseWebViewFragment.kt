@@ -14,7 +14,7 @@ import com.kotlinchina.smallpockets.widget.CustomProgressWebView
 class BaseWebViewFragment : Fragment() {
 
     companion object {
-        fun newInstance(url: String): BaseWebViewFragment {
+        fun newInstance(url: String?): BaseWebViewFragment {
             val args = Bundle()
             args.putString("url", url)
             val fragment = BaseWebViewFragment()
@@ -31,13 +31,12 @@ class BaseWebViewFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        //test url
-        val perItemUrl: String? = arguments.get("url") as? String ;
+        val perItemUrl: String? = arguments.get("url") as? String
         customProgressWebView?.loadUrl(perItemUrl)
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater?.inflate(R.layout.fragment_basewebview,container,false) ;
+        return inflater?.inflate(R.layout.fragment_basewebview,container,false)
     }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
