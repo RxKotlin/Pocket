@@ -113,7 +113,8 @@ class LinkListFragment() : Fragment(), ILinkListView {
     }
 
     fun backPressed():Boolean {
-        if(drawerLayout?.isDrawerOpen(drawerContent) as Boolean){
+        val isDrawerLayoutOpenOrNot = drawerLayout?.isDrawerOpen(drawerContent) as? Boolean
+        if(isDrawerLayoutOpenOrNot !=null && isDrawerLayoutOpenOrNot){
             drawerLayout?.closeDrawer(drawerContent)
             return true
         }else{

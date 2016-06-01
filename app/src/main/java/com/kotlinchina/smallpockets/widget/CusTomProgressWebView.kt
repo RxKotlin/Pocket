@@ -120,7 +120,8 @@ class CustomProgressWebView : LinearLayout {
     private fun webViewOnkeyListener() {
         mWebView?.setOnKeyListener(View.OnKeyListener { v, keyCode, event ->
             if (event.action == KeyEvent.ACTION_DOWN) {
-                if (keyCode == KeyEvent.KEYCODE_BACK && (mWebView as WebView)?.canGoBack()) {
+                val canGoBack = mWebView?.canGoBack() as? Boolean
+                if (keyCode == KeyEvent.KEYCODE_BACK && canGoBack!=null && canGoBack) {
                     mWebView?.goBack()
                     return@OnKeyListener true
                 }
