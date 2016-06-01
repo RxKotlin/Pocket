@@ -21,15 +21,11 @@ import com.kotlinchina.smallpockets.R
 class CustomProgressWebView : LinearLayout {
 
     private var mWebView: WebView? = null
-
     private var mProgressBar: ProgressBar? = null
-
     constructor(context: Context?) : this(context,null){}
-
     constructor(context: Context?, attrs: AttributeSet?) : this(context, attrs,0) {}
-
     constructor(context: Context?, attrs: AttributeSet?, defStyle: Int) : super(context, attrs, defStyle) {
-        initView(context) ;
+        initView(context)
     }
 
     private fun initView(context: Context?) {
@@ -47,7 +43,6 @@ class CustomProgressWebView : LinearLayout {
     }
 
     private fun initWebview(url: String) {
-
         initBaseSetting(url)
         setWebViewClient()
         setWebchromeClient()
@@ -68,7 +63,6 @@ class CustomProgressWebView : LinearLayout {
 
     private  fun setWebViewClient(){
         mWebView?.setWebViewClient(object : WebViewClient() {
-
             override fun shouldOverrideUrlLoading(view: WebView?, url: String): Boolean {
                 view?.loadUrl(url)
                 return true
@@ -89,7 +83,6 @@ class CustomProgressWebView : LinearLayout {
             }
 
             override fun onReceivedError(view: WebView?, errorCode: Int, description: String, failingUrl: String) {
-                //				view.loadData(errorHtml, "text/html; charset=UTF-8", null);
                 super.onReceivedError(view, errorCode, description, failingUrl)
             }
 
@@ -127,7 +120,7 @@ class CustomProgressWebView : LinearLayout {
     private fun webViewOnkeyListener() {
         mWebView?.setOnKeyListener(View.OnKeyListener { v, keyCode, event ->
             if (event.action == KeyEvent.ACTION_DOWN) {
-                if (keyCode == KeyEvent.KEYCODE_BACK && (mWebView as WebView).canGoBack()) {
+                if (keyCode == KeyEvent.KEYCODE_BACK && (mWebView as WebView)?.canGoBack()) {
                     mWebView?.goBack()
                     return@OnKeyListener true
                 }

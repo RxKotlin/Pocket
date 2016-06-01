@@ -27,19 +27,12 @@ import java.util.*
 class LinkListFragment() : Fragment(), ILinkListView {
 
     var linkListPresenter: ILinkListPresenter? = null
-
     val CLIPBOARD_TAG: String = "CLIPBOARD"
-
-    var listview: ListView? = null
-
-    var datas: MutableList<Link> = ArrayList()
-
+    var listView: ListView? = null
+    var data: MutableList<Link> = ArrayList()
     var adapter: ShowSiteListAdapter? = null
-
-    var mDrawerLayout: DrawerLayout? = null
-
-    var drawer_content: RelativeLayout? = null
-
+    var drawerLayout: DrawerLayout? = null
+    var drawerContent: RelativeLayout? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,14 +47,14 @@ class LinkListFragment() : Fragment(), ILinkListView {
         super.onActivityCreated(savedInstanceState)
         linkListPresenter?.refreshList()
         linkListPresenter?.checkClipboard()
-        setListViewOnItemClick()
+        setupListViewItem()
     }
 
-    private fun setListViewOnItemClick() {
-        listview?.setOnItemClickListener { adapterView, view, i, l ->
-            val perSaveUrl:String? = datas?.get(i)?.url
+    private fun setupListViewItem() {
+        listView?.setOnItemClickListener { adapterView, view, i, l ->
+            val perSaveUrl = data?.get(i)?.url
             childFragmentManager.beginTransaction().replace(R.id.drawer_content,BaseWebViewFragment.newInstance(perSaveUrl)).commit()
-            mDrawerLayout?.openDrawer(drawer_content)
+            drawerLayout?.openDrawer(drawerContent)
         }
     }
 
@@ -71,9 +64,9 @@ class LinkListFragment() : Fragment(), ILinkListView {
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        listview = view?.findViewById(R.id.link_list) as? ListView
-        mDrawerLayout = view?.findViewById(R.id.drawer_layout) as? DrawerLayout
-        drawer_content = view?.findViewById(R.id.drawer_content) as? RelativeLayout
+        listView = view?.findViewById(R.id.link_list) as? ListView
+        drawerLayout = view?.findViewById(R.id.drawer_layout) as? DrawerLayout
+        drawerContent = view?.findViewById(R.id.drawer_content) as? RelativeLayout
     }
 
     override fun showDialog(link: String) {
@@ -93,11 +86,11 @@ class LinkListFragment() : Fragment(), ILinkListView {
         Log.e(CLIPBOARD_TAG, msg)
     }
 
-    override fun setSiteListData(data: List<Link>) {
-        datas?.clear()
-        datas?.addAll(data)
-        adapter = ShowSiteListAdapter(activity, R.layout.show_site_list_item, data)
-        listview?.adapter = adapter
+    override fun setSiteListData(dataResult: List<Link>) {
+        data?.clear()
+        data?.addAll(dataResult)
+        adapter = ShowSiteListAdapter(activity, R.layout.show_site_list_item, dataResult)
+        listView?.adapter = adapter
     }
 
     override fun showSaveScreenWithTitle(title: String, url: String) {
@@ -120,11 +113,11 @@ class LinkListFragment() : Fragment(), ILinkListView {
     }
 
     fun backPressed():Boolean {
-        if(mDrawerLayout?.isDrawerOpen(drawer_content) as Boolean){
-            mDrawerLayout?.closeDrawer(drawer_content)
-            return true ;
+        if(drawerLayout?.isDrawerOpen(drawerContent) as Boolean){
+            drawerLayout?.closeDrawer(drawerContent)
+            return true
         }else{
-            return false ;
+            return false
         }
     }
 
