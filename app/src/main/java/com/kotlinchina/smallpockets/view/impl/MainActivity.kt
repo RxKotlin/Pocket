@@ -19,7 +19,8 @@ import net.hockeyapp.android.CrashManager
 import java.io.IOException
 import java.util.*
 
-class MainActivity : AppCompatActivity(), IMainView, EvernoteLoginFragment.ResultCallback {
+class MainActivity : AppCompatActivity(), IMainView, EvernoteLoginFragment.ResultCallback, LinkListFragment.ShareWeeklyLinks {
+
     companion object {
         val SAVE_TAGS = "1000"
         val EVERNOTE_SERVICE = EvernoteSession.EvernoteService.PRODUCTION
@@ -98,12 +99,20 @@ class MainActivity : AppCompatActivity(), IMainView, EvernoteLoginFragment.Resul
         linkListFragment = LinkListFragment()
         fragmentTransaction.add(R.id.main_container, linkListFragment)
         fragmentTransaction.commit()
+        (linkListFragment as? LinkListFragment)?.setShareWeeklyLinks(this)
     }
 
     override fun onBackPressed() {
         val backPressedEvent = linkListFragment?.backPressed() as? Boolean
         if(backPressedEvent!=null && !backPressedEvent){
             super.onBackPressed()
+        }
+    }
+    override fun shareLink() {
+        if (checkEvernoteLogin()) {
+            mainPresenter?.shareWeeklyLinks(Date())
+        } else {
+            evernoteSession?.authenticate(this)
         }
     }
 }

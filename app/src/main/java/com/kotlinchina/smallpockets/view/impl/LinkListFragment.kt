@@ -22,6 +22,7 @@ import com.kotlinchina.smallpockets.service.impl.RealmStore
 import com.kotlinchina.smallpockets.service.impl.WebViewClientHttpService
 import com.kotlinchina.smallpockets.view.Fragment.BaseWebViewFragment
 import com.kotlinchina.smallpockets.view.ILinkListView
+import com.melnykov.fab.FloatingActionButton
 import java.util.*
 
 class LinkListFragment() : Fragment(), ILinkListView {
@@ -33,6 +34,7 @@ class LinkListFragment() : Fragment(), ILinkListView {
     var adapter: ShowSiteListAdapter? = null
     var drawerLayout: DrawerLayout? = null
     var drawerContent: RelativeLayout? = null
+    var fab: FloatingActionButton? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,6 +58,7 @@ class LinkListFragment() : Fragment(), ILinkListView {
             childFragmentManager.beginTransaction().replace(R.id.drawer_content,BaseWebViewFragment.newInstance(perSaveUrl)).commit()
             drawerLayout?.openDrawer(drawerContent)
         }
+
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -67,6 +70,14 @@ class LinkListFragment() : Fragment(), ILinkListView {
         listView = view?.findViewById(R.id.link_list) as? ListView
         drawerLayout = view?.findViewById(R.id.drawer_layout) as? DrawerLayout
         drawerContent = view?.findViewById(R.id.drawer_content) as? RelativeLayout
+        fab = view?.findViewById(R.id.fab) as? FloatingActionButton
+        var curList = listView as? ListView
+        if(curList !=null){
+            fab?.attachToListView(curList)
+        }
+        fab?.setOnClickListener {
+            shShareWeeklyLinks?.shareLink()
+        }
     }
 
     override fun showDialog(link: String) {
@@ -122,4 +133,12 @@ class LinkListFragment() : Fragment(), ILinkListView {
         }
     }
 
+    var shShareWeeklyLinks:ShareWeeklyLinks?=null
+    fun setShareWeeklyLinks(shShareWeeklyLinks:ShareWeeklyLinks){
+        this.shShareWeeklyLinks = shShareWeeklyLinks
+    }
+
+    interface ShareWeeklyLinks{
+        fun shareLink()
+    }
 }
