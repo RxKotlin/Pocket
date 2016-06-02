@@ -27,6 +27,7 @@ class MainActivity : AppCompatActivity(), IMainView, EvernoteLoginFragment.Resul
 
     var mainPresenter: IMainPresenter? = null
     var evernoteSession: EvernoteSession? = null
+    var linkListFragment: LinkListFragment? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -93,9 +94,16 @@ class MainActivity : AppCompatActivity(), IMainView, EvernoteLoginFragment.Resul
     }
 
     private fun setupFrament() {
-        val fragmentTransaction = fragmentManager.beginTransaction()
-        val linkListFragment = LinkListFragment()
+        val fragmentTransaction = supportFragmentManager.beginTransaction()
+        linkListFragment = LinkListFragment()
         fragmentTransaction.add(R.id.main_container, linkListFragment)
         fragmentTransaction.commit()
+    }
+
+    override fun onBackPressed() {
+        val backPressedEvent = linkListFragment?.backPressed() as? Boolean
+        if(backPressedEvent!=null && !backPressedEvent){
+            super.onBackPressed()
+        }
     }
 }

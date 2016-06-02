@@ -16,10 +16,13 @@ Steps:
 4. click OK
 5. input tags for this link
 6. click save
+7. click link item show detail
 
 ![1](./screenshot/1k.png)
 ![2](./screenshot/2k.png)
 ![3](./screenshot/3k.png)
+![4](./screenshot/4k.png)
+![5](./screenshot/5k.png)
 
 ## Architectural
 
