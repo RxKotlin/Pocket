@@ -77,7 +77,6 @@ class MainActivity : AppCompatActivity(), IMainView, EvernoteLoginFragment.Resul
             val key = progerties.getProperty("consumer_key")
             val secret = progerties.getProperty("consumer_secret")
             inStream.close()
-
             EvernoteSession.Builder(this)
                     .setEvernoteService(EVERNOTE_SERVICE)
                     .setSupportAppLinkedNotebooks(false)

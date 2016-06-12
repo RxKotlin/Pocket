@@ -23,7 +23,6 @@ Steps:
 ![3](./screenshot/3k.png)
 ![4](./screenshot/4k.png)
 ![5](./screenshot/5k.png)
-![6](./screenshot/6k.gif)
 
 ## Architectural
 

@@ -35,6 +35,7 @@ class LinkListFragment() : Fragment(), ILinkListView {
     var drawerLayout: DrawerLayout? = null
     var drawerContent: RelativeLayout? = null
     var fab: FloatingActionButton? = null
+    var shShareWeeklyLinks:ShareWeeklyLinks? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,7 +59,6 @@ class LinkListFragment() : Fragment(), ILinkListView {
             childFragmentManager.beginTransaction().replace(R.id.drawer_content,BaseWebViewFragment.newInstance(perSaveUrl)).commit()
             drawerLayout?.openDrawer(drawerContent)
         }
-
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -133,7 +133,6 @@ class LinkListFragment() : Fragment(), ILinkListView {
         }
     }
 
-    var shShareWeeklyLinks:ShareWeeklyLinks?=null
     fun setShareWeeklyLinks(shShareWeeklyLinks:ShareWeeklyLinks){
         this.shShareWeeklyLinks = shShareWeeklyLinks
     }
