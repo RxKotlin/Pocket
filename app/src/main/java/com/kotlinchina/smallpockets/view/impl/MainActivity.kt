@@ -3,6 +3,7 @@ package com.kotlinchina.smallpockets.view.impl
 import android.os.Bundle
 
 import android.support.v7.app.AppCompatActivity
+import android.view.KeyEvent
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
@@ -14,6 +15,8 @@ import com.kotlinchina.smallpockets.presenter.impl.MainPresenter
 import com.kotlinchina.smallpockets.service.impl.EvernoteShareService
 import com.kotlinchina.smallpockets.service.impl.RealmStore
 import com.kotlinchina.smallpockets.transform.impl.LinksToHTMLWithHTMLEngine
+import com.kotlinchina.smallpockets.utils.AppManager
+import com.kotlinchina.smallpockets.utils.DoubClickExitHelper
 import com.kotlinchina.smallpockets.view.IMainView
 import net.hockeyapp.android.CrashManager
 import java.io.IOException
@@ -29,12 +32,19 @@ class MainActivity : AppCompatActivity(), IMainView, EvernoteLoginFragment.Resul
     var mainPresenter: IMainPresenter? = null
     var evernoteSession: EvernoteSession? = null
     var linkListFragment: LinkListFragment? = null
+    var doubleClickExit: DoubClickExitHelper? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_activity)
         setupFrament()
         setupPresneter()
+        initMember()
+    }
+
+    private fun initMember() {
+        AppManager.appManager?.addActivity(this)
+        doubleClickExit = DoubClickExitHelper(this)
     }
 
     override fun onResume() {
@@ -101,17 +111,24 @@ class MainActivity : AppCompatActivity(), IMainView, EvernoteLoginFragment.Resul
         (linkListFragment as? LinkListFragment)?.setShareWeeklyLinks(this)
     }
 
-    override fun onBackPressed() {
-        val backPressedEvent = linkListFragment?.backPressed() as? Boolean
-        if(backPressedEvent!=null && !backPressedEvent){
-            super.onBackPressed()
-        }
-    }
     override fun shareLink() {
         if (checkEvernoteLogin()) {
             mainPresenter?.shareWeeklyLinks(Date())
         } else {
             evernoteSession?.authenticate(this)
         }
+    }
+
+    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
+        if(keyCode == KeyEvent.KEYCODE_BACK){
+            val backPressedEvent = linkListFragment?.backPressed() as? Boolean
+            if(backPressedEvent!=null && !backPressedEvent){
+                val isExitApp = doubleClickExit?.onKeyDown(keyCode, event) as? Boolean
+                if(isExitApp!=null){
+                    return isExitApp
+                }
+            }
+        }
+       return false ;
     }
 }

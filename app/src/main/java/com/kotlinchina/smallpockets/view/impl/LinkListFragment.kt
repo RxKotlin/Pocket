@@ -3,6 +3,7 @@ package com.kotlinchina.smallpockets.view.impl
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.widget.DrawerLayout
+import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.app.AlertDialog
 import android.util.Log
 import android.view.LayoutInflater
@@ -25,7 +26,7 @@ import com.kotlinchina.smallpockets.view.ILinkListView
 import com.melnykov.fab.FloatingActionButton
 import java.util.*
 
-class LinkListFragment() : Fragment(), ILinkListView {
+class LinkListFragment() : Fragment(), ILinkListView ,SwipeRefreshLayout.OnRefreshListener {
 
     var linkListPresenter: ILinkListPresenter? = null
     val CLIPBOARD_TAG: String = "CLIPBOARD"
@@ -36,6 +37,7 @@ class LinkListFragment() : Fragment(), ILinkListView {
     var drawerContent: RelativeLayout? = null
     var fab: FloatingActionButton? = null
     var shShareWeeklyLinks:ShareWeeklyLinks? = null
+    var swipeLayout: SwipeRefreshLayout? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,10 +69,23 @@ class LinkListFragment() : Fragment(), ILinkListView {
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initView(view)
+        setSwipeLayout()
+    }
+
+    private fun setSwipeLayout() {
+        swipeLayout?.setOnRefreshListener(this)
+        swipeLayout?.setSize(SwipeRefreshLayout.LARGE)
+        swipeLayout?.setColorSchemeResources(android.R.color.holo_red_light,
+                android.R.color.holo_green_light, android.R.color.holo_orange_light, android.R.color.holo_blue_bright)
+    }
+
+    private fun initView(view: View?) {
         listView = view?.findViewById(R.id.link_list) as? ListView
         drawerLayout = view?.findViewById(R.id.drawer_layout) as? DrawerLayout
         drawerContent = view?.findViewById(R.id.drawer_content) as? RelativeLayout
         fab = view?.findViewById(R.id.fab) as? FloatingActionButton
+        swipeLayout = view?.findViewById(R.id.swipeLayout) as? SwipeRefreshLayout
         var curList = listView as? ListView
         if(curList !=null){
             fab?.attachToListView(curList)
@@ -102,6 +117,7 @@ class LinkListFragment() : Fragment(), ILinkListView {
         data?.addAll(dataResult)
         adapter = ShowSiteListAdapter(activity, R.layout.show_site_list_item, dataResult)
         listView?.adapter = adapter
+        swipeLayout?.isRefreshing = false;
     }
 
     override fun showSaveScreenWithTitle(title: String, url: String) {
@@ -114,9 +130,7 @@ class LinkListFragment() : Fragment(), ILinkListView {
             val title = data[SaveTagDialog.TITLE] as? String
             val url = data[SaveTagDialog.URL] as? String
             val tags = data[SaveTagDialog.TAGS] as? List<String>
-            if (title != null
-                    && url != null
-                    && tags != null) {
+            if (title != null && url != null && tags != null) {
                 linkListPresenter?.saveToDB(title, url, tags)
             }
         }
@@ -139,5 +153,9 @@ class LinkListFragment() : Fragment(), ILinkListView {
 
     interface ShareWeeklyLinks{
         fun shareLink()
+    }
+
+    override fun onRefresh() {
+        linkListPresenter?.refreshList()
     }
 }
