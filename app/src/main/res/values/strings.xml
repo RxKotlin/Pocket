@@ -4,4 +4,5 @@
     <string name="save_link_ornot">需要保存此链接么？</string>
     <string name="Ok">Ok</string>
     <string name="Cancel">Cancel</string>
+    <string name="double_click_exit">Double Click Exit App</string>
 </resources>
